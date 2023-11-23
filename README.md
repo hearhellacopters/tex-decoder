@@ -1,6 +1,6 @@
 # tex-decoder
 
-A pure typescript texture decoder for most image compression types of without the use of WebGL. Includes a color profile converter, unswizzler and TGA file maker. Great for Node or web browsers.
+A pure typescript texture decoder for most image compression types without the use of WebGL. Includes a color profile converter, unswizzler and TGA file maker. Great for Node or web browsers.
 
 Fully supports the following formats:
 
