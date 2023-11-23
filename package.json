@@ -1,0 +1,39 @@
+{
+  "name": "tex-decoder",
+  "version": "1.0.0",
+  "description": "Javascript texture data decoders with the need for WebGL",
+  "module": "lib/esm/index.mjs",
+  "main": "lib/cjs/index.js",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.mjs",
+      "require": "./lib/cjs/index.js"
+    },
+    "./*": "./*"
+  },
+  "scripts": {
+    "clean": "rmdir /S /Q lib",
+    "build": "npm run clean && npm run build:esm && npm run move && npm run build:cjs",
+    "build:esm": "tsc --module esnext --outDir lib/esm",
+    "move": "cd ./lib/esm/ && ren index.js index.mjs && cd ../../",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "prepack": ""
+  },
+  "author": "HearHellacopters",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^10.0.2",
+    "@types/node": "^20.8.6",
+    "@typescript/lib-dom": "npm:@types/web@^0.0.115",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "bireader": "^1.0.42"
+  }
+}
