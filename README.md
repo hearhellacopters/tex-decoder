@@ -186,25 +186,19 @@ Decodes compressed DXT data. Source must be Uint8Array or Buffer. Returns the sa
     <td>Returns RGBA data.</td>
   </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeDXT3(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeBC2.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeDXT4(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
-  <tr>
-    <tr>
+   <tr>
     <td align="center"><b>Name</td>
     <td>decodeDXT5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeBC3.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -223,67 +217,49 @@ Decodes compressed BC1-7 data. Source must be Uint8Array or Buffer. Returns the 
 </thead>
 <tbody>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeBC1(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeDXT1.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeBC2(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeDXT3.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeBC3(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeDXT5.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeBC4(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeATI1.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>decodeBC5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeATI2.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Name<br>(Master)</td>
     <td>decodeBC6(<b>src, width, height,</b> unsigned)</td>
     <td>Returns RGBA data. Set unsigned as <b>false</b> if data is signed (defaults true)</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeBC6H(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Unsigned data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeBC6S(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Signed data.</td>
   </tr>
-  </tr>
-   <tr>
     <tr>
     <td align="center"><b>Name</td>
     <td>decodeDXT7(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -302,25 +278,19 @@ Decodes compressed ATI1 or ATI2 data. Source must be Uint8Array or Buffer. Retur
 </thead>
 <tbody>
 <tr>
-    <tr>
     <td align="center"><b>Name<br>(Master)</td>
     <td>decodeATI(<b>src, width, height</b>, Do2)</td>
     <td>Returns RGBA data. Will run ATI2 if Do2 is <b>true</b> (default ATI1).</td>
   </tr>
-  </tr>
-<tr>
-    <tr>
+  <tr>
     <td align="center"><b>Preset</td>
     <td>decodeATI1(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeBC4.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeATI2(<b>src, width, height</b>)</td>
     <td>Returns RGBA data. Same function as decodeBC5.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -339,25 +309,19 @@ Decodes compressed ATC4 or ATC8 data. Source must be Uint8Array or Buffer. Retur
 </thead>
 <tbody>
 <tr>
-    <tr>
     <td align="center"><b>Name<br>(Master)</td>
     <td>decodeATC(<b>src, width, height,</b> Do8bitMode)</td>
     <td>Returns RGBA data. Will run 8 bit mode if Do8bitMode is <b>true</b> (default false for 4 bit).</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeATC4(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeATC8(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -376,25 +340,19 @@ Decodes compressed PVRTC data in 2 or 4 bit mode. Source must be Uint8Array or B
 </thead>
 <tbody>
 <tr>
-    <tr>
     <td align="center"><b>Name<br>(Master)</td>
     <td>decodePVRTC(<b>src, width, height,</b> Do2bitMode)</td>
     <td>Returns RGBA data. Will run 2 bit mode if Do2bitMode is <b>true</b> (default false for 4 bit).</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodePVRTC4bit(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodePVRTC2bit(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -412,110 +370,80 @@ Decodes compressed ASTC data in 4x4 to 12x12 bit mode. Source must be Uint8Array
   </tr>
 </thead>
 <tbody>
-<tr>
-    <tr>
+  <tr>
     <td align="center"><b>Name<br>(Master)</td>
     <td>decodeASTC(<b>src, width, height, block_width, block_height</b>)</td>
     <td>Returns RGBA data. For this function you can pass the block size as arguments.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_4x4(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_5x4(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_5x5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_6x5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_6x6(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_8x5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_8x6(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_8x8(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_10x5(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_10x6(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_10x8(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_10x10(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_12x10(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeASTC_12x12(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -535,19 +463,15 @@ Data must be a vaild [.crn](https://www.sweetscape.com/010editor/repository/file
   </tr>
 </thead>
 <tbody>
-<tr>
-    <tr>
+  <tr>
     <td align="center"><b>Name</td>
     <td>getCRNMeta(<b>src</b>, mipmap_level)</td>
     <td>Checks the crunched data and returns width, height, mipmaps, faces and format of compressed data. Can supply mip level if file has more than one to get the right width, height.</td>
   </tr>
-  </tr>
   <tr>
-    <tr>
     <td align="center"><b>Preset</td>
     <td>decodeCRN(<b>src</b>, mipmap_level, keepCompressed)</td>
     <td>Returns decode RGBA data unless keepCompressed is <b>true</b> (default false). Can supply mip level if file has more than one to get that level returned data.</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -665,18 +589,15 @@ Unswizzle data. Based on an xbox function. Only works for color profiles with pi
   </tr>
 </thead>
 <tbody>
-<tr>
-    <tr>
+  <tr>
     <td align="center"><b>Name</td>
     <td>unswizzle(<b>src, width, height, depth, bytesPerPixel, dstRowPitch, dstSlicePitch</b>)</td>
     <td><b>Note:</b> bytesPerPixel must be 1, 2 or 4.</td>
-  </tr>
   </tr>
   <tr>
     <td align="center"><b>Name</td>
     <td>flipImage(<b>src, width, height</b>, is24)</td>
     <td>Simple image fliper. Works with 24 and 32 bit profiles (default 32).</td>
-  </tr>
   </tr>
 </tbody>
 </table>
@@ -695,11 +616,9 @@ Simple TGA file maker. Must be RGB8 or RBA8 profile. Source must be Uint8Array o
 </thead>
 <tbody>
 <tr>
-    <tr>
     <td align="center"><b>Name</td>
     <td>makeTGA(<b>src, width, height,</b> noAlpha)</td>
     <td>Use noAlpha as <b>true<b> for 24 bit profiles</td>
-  </tr>
   </tr>
 </tbody>
 </table>
