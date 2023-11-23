@@ -4,7 +4,7 @@ A pure typescript texture decoder for most image compression types without the u
 
 Fully supports the following formats:
 
-- [ETC](#etc) ETC1, ETC1 EAC decoding. Includes options for alpha in ETC1.
+- [ETC](#etc) ETC1, ETC2 and EAC decoding. Includes options for alpha in ETC1.
 - [DXTn](#dtx) DTX1 (aka BC1), DXT2 (aka BC2), DXT3 (aka BC2), DXT4 (aka BC3) and DXT5 (aka BC3).
 - [BCn](#bc) BC1 (aka DTX1), BC2 (aka DXT3), BC3 (aka DXT5), BC4 (aka ATI1), BC5 (AKA ATI2), BC6 (signed and unsigned) and BC7.
 - [ATI](#ati) ATI1 and ATI2.
