@@ -171,6 +171,7 @@ export function unswizzle
 
 // source
 // https://github.com/yuzu-emu/yuzu/blob/43be2bfe332d5537041262eb08037993239eaf5f/src/video_core/textures/decoders.h
+// https://github.com/ScanMountGoat/tegra_swizzle/tree/main
 function MakeSwizzleTable() {
     const table = Array.from({ length: 8 }, () => new Uint32Array(64));
     for (var y = 0; y < 8; ++y) {

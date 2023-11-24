@@ -12,7 +12,7 @@
  * @param mipmap_level - mip level data to return (defaults to index 0 AKA largest image)
  * @returns {object} image metadata
  */
-export declare function getCRNMeta(data: Uint8Array | Buffer, mipmap_level?: number): {
+export declare function getCRNMeta(src: Uint8Array | Buffer, mipmap_level?: number): {
     width: number;
     height: number;
     mipmaps: number;
@@ -39,10 +39,10 @@ export declare function getCRNMeta(data: Uint8Array | Buffer, mipmap_level?: num
  *
  * https://www.sweetscape.com/010editor/repository/files/CRN.bt
  *
- * @param {Uint8Array | Buffer} data - Source data as ``Buffer`` or ``Uint8Array``
+ * @param {Uint8Array | Buffer} src - Source data as ``Buffer`` or ``Uint8Array``
  * @param {number} mipmap_level - mip level to decode (defaults to index 0 AKA largest image).
  * @param {boolean} keepCompressed - Returns formated data (doesn't decode to RGBA) default false.
  * @returns uncrunched data
  */
-export declare function decodeCRN(data: Uint8Array | Buffer, mipmap_level?: number, keepCompressed?: boolean): Uint8Array | Buffer;
+export declare function decodeCRN(src: Uint8Array | Buffer, mipmap_level?: number, keepCompressed?: boolean): Uint8Array | Buffer;
 //# sourceMappingURL=crn2.d.ts.map

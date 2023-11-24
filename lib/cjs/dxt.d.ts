@@ -11,12 +11,12 @@ export declare function decodeBC1(src: Uint8Array | Buffer, width: number, heigh
 /**
  * Decompress DXT1 data. Returns Buffer or Uint8Array based on source data type.
  *
- * @param {Buffer|Uint8Array} input - Source data as ```Uint8Array``` or ```Buffer```
+ * @param {Buffer|Uint8Array} src - Source data as ```Uint8Array``` or ```Buffer```
  * @param {number} width - Image Width
  * @param {number} height - Image Height
  * @returns ```Uint8Array``` or ```Buffer``` as RGBA
  */
-export declare function decodeDXT1(input: Uint8Array | Buffer, width: number, height: number): Uint8Array | Buffer;
+export declare function decodeDXT1(src: Uint8Array | Buffer, width: number, height: number): Uint8Array | Buffer;
 /**
  * Decompress DXT2. Returns Buffer or Uint8Array based on source data type.
  *

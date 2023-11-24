@@ -35,7 +35,7 @@ export declare const ETC_FORMAT: {
 * 2  = RGBA;
 * ```
 */
-export declare const PROFILE: {
+export declare const ETC_PROFILE: {
     RGB: number;
     RGBA: number;
 };
@@ -165,7 +165,7 @@ export declare function decodeETC2sRGBA1(src: Buffer | Uint8Array, width: number
 * @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
-* @param {number} srcFormat -
+* @param {number} ETC_FORMAT -
 * ```
 * //use import ETC_FORMAT.yourFormat
 * import {ETC_FORMAT} from 'tex-decoder'
@@ -182,14 +182,14 @@ export declare function decodeETC2sRGBA1(src: Buffer | Uint8Array, width: number
 * 10 = ETC_FORMAT.ETC2_SRGBA8;
 * 11 = ETC_FORMAT.ETC2_SRGBA1;
 * ```
-* @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
+* @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order. use ```ETC_PROFILE```
 * ```
 * //use import PROFILE.yourProfile
 * import {PROFILE} from 'tex-decoder'
-* 2  = import.RGB;
-* 3  = import.RGBA;
+* 1  = import.RGB;
+* 2  = import.RGBA;
 * ```
 * @returns ```Uint8Array``` or ```Buffer``` as RGB or RGBA
 */
-export declare function decodeETC(src: Buffer | Uint8Array, width: number, height: number, srcFormat: number, forceRGBorRGBA?: number): Uint8Array;
+export declare function decodeETC(src: Buffer | Uint8Array, width: number, height: number, ETC_FORMAT: number, forceRGBorRGBA?: number): Uint8Array;
 //# sourceMappingURL=etc.d.ts.map

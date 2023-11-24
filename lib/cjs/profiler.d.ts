@@ -300,7 +300,7 @@ export declare const COLORPROFILE: {
     };
 };
 /**
- * Convert color data profile
+ * Convert color data profile.
  *
  * @param {Buffer|Uint8Array} src - Source Data
  * @param {COLOR_PROFILE} srcProfile - Source Color Profile (use ```COLOR_PROFILE```)

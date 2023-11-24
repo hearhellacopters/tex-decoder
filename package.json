@@ -1,6 +1,6 @@
 {
   "name": "tex-decoder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Javascript texture data decoders with the need for WebGL",
   "module": "lib/esm/index.mjs",
   "main": "lib/cjs/index.js",
@@ -34,6 +34,6 @@
     "node": ">=12"
   },
   "dependencies": {
-    "bireader": "^1.0.42"
+    "bireader": "^1.0.44"
   }
 }

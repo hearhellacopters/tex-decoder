@@ -4,13 +4,13 @@ A pure typescript texture decoder for most image compression types without the u
 
 Fully supports the following formats:
 
-- [ETC](#etc) ETC1, ETC2 and EAC decoding. Includes options for alpha in ETC1.
-- [DXTn](#dtx) DTX1 (aka BC1), DXT2 (aka BC2), DXT3 (aka BC2), DXT4 (aka BC3) and DXT5 (aka BC3).
-- [BCn](#bc) BC1 (aka DTX1), BC2 (aka DXT3), BC3 (aka DXT5), BC4 (aka ATI1), BC5 (AKA ATI2), BC6 (signed and unsigned) and BC7.
-- [ATI](#ati) ATI1 and ATI2.
-- [ATC](#atc) ATC 4 and 8.
+- [ETC](#etc) - ETC1, ETC2 and EAC decoding. Includes options for alpha in ETC1.
+- [DXTn](#dtx) - DTX1 (aka BC1), DXT2 (aka BC2), DXT3 (aka BC2), DXT4 (aka BC3) and DXT5 (aka BC3).
+- [BCn](#bc) - BC1 (aka DTX1), BC2 (aka DXT3), BC3 (aka DXT5), BC4 (aka ATI1), BC5 (AKA ATI2), BC6 (signed and unsigned) and BC7.
+- [ATI](#ati) - ATI1 and ATI2.
+- [ATC](#atc) - ATC 4 and 8.
 - [PVRTC](#pvrtc) - PVRTC in 2 bit or 4 bit mode.
-- [ASTC](#astc) ASTC 4x4 to 12x12.
+- [ASTC](#astc) - ASTC 4x4 to 12x12.
 - [CRN](#crn) - Crunch data supporting all DXT.
 
 Also includes:
@@ -24,6 +24,34 @@ Also includes:
 ```npm install tex-decoder```
 
 Provides both CommonJS and ES modules.
+
+## Example
+
+Decoding ETC data with supplied format selector and create a TGA file.
+
+```javascript
+const {
+    decodeETC,
+    ETC_FORMAT,
+    makeTGA
+    } = require('tex-decoder');
+
+//read file data
+const data = fs.readFileSync(__dirname + '/ETC2_RGBA8_image.bin');
+
+//decode compressed data
+const decodedData = decodeETC(data,512,512,ETC_FORMAT.ETC2_RGBA8);
+//or use preset format function decodeETC2RGBA(data,512,512);
+
+//write raw RGBA output
+fs.writeFileSync(__dirname + '/ETC2_RGBA8.dat',decodedData);
+
+//or create a TGA file
+const tga = makeTGA(decodedData,512,512,true);
+
+//write .tga file
+fs.writeFileSync(__dirname + '/ETC2_RGBA8.tga',tga);
+```
 
 ## ETC
 
@@ -628,6 +656,12 @@ Simple TGA file maker. Must be RGB8 or RBA8 profile. Source must be Uint8Array o
 This project was born from the desire to have a single library that could convert any image format. Having been using tools like [Noesis](https://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91) and [PVRTool](https://developer.imaginationtech.com/pvrtextool/) in the past, I wanted something I could translate quickly to a Node app and then use in a web site without having to redo work.
 
 I'm happy to connect and grow this library if others find it useful. Pull requests or [bug reports](https://github.com/hearhellacopters/tex-decoder/issues) are welcome!
+
+## Disclaimer
+
+All libraries are presented *as is*, I take no responsibility for outside use.
+
+**If you plan to implement these libraries for anything other than personal or educational use, please be sure you have the appropriate permissions from the original owners.**
 
 ## License
 
