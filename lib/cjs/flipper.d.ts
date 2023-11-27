@@ -11,4 +11,14 @@
  * @returns ```Buffer``` or ```Uint8Array```
  */
 export declare function flipImage(src: Buffer | Uint8Array, width: number, height: number, is24?: boolean): Buffer | Uint8Array;
+/**
+ * Image cropper.
+ *
+ * @param {Buffer | Uint8Array} src - Source data as a Uint8Array or Buffer.
+ * @param {number} width - New image width
+ * @param {number} height - New image height
+ * @param {number} srcBitsPerPixel - bits per pixel of source data
+ * @returns {Buffer | Uint8Array}
+ */
+export declare function cropImage(src: Buffer | Uint8Array, width: number, height: number, srcBitsPerPixel: number): Buffer | Uint8Array;
 //# sourceMappingURL=flipper.d.ts.map

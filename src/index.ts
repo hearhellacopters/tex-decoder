@@ -82,13 +82,29 @@ export {
     TGA_PROFILE
 } from './tga_maker';
 export {
+    readPNG,
+    makePNG,
+    makePNG2
+} from './png_maker'
+export {
     COLORPROFILE, 
     BYTE_VALUE,
     convertProfile,
-    } from './profiler';
+} from './profiler';
 export {
-    flipImage
-    } from './flipper';
+    flipImage,
+    cropImage
+} from './flipper';
+export  {
+    inflate,
+    Inflate,
+    deflate,
+    Deflate,
+    deflateRaw,
+    inflateRaw,
+    gzip,
+    ungzip
+} from './deflate/index'
 export {
     unswizzle
 } from './unswizzling';

@@ -4,7 +4,7 @@ export declare const TGA_PROFILE: {
     RGBA: number;
 };
 /**
- * Create a .TGA file. Must be straight RGBA or RGB profile.
+ * Create a .tga file. Must be straight RGBA or RGB profile.
  *
  * @param {Uint8Array|Buffer} src - source as RGB or RGBA
  * @param {number} width - image width

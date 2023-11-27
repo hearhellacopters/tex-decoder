@@ -1,6 +1,6 @@
 # tex-decoder
 
-A pure typescript texture decoder for most image compression types without the use of WebGL. Includes a color profile converter, unswizzler and TGA file maker. Great for Node or web browsers.
+A pure typescript texture decoder for most image compression types without the use of WebGL. Includes a color profile converter, unswizzler, image flipper and resizer plus a TGA and PNG file maker. Great for Node or web browsers.
 
 Fully supports the following formats:
 
@@ -15,9 +15,13 @@ Fully supports the following formats:
 
 Also includes:
 
-- [Color Profile Converter](#color-profile-converter) Convert an image color profile.
-- [Unswizzler](#unswizzler) Unswizzler image data based on 1, 2 or 4 bytes.
-- [TGA Maker](#tga-maker) Create a TGA file from a RGB or RGBA image.
+- [Color Profile Converter](#color-profile-converter) - Convert an image color profile.
+- [Unswizzler](#unswizzler) - Unswizzler image data based on 1, 2 or 4 bytes.
+- [Image Flipper](#image-flipper) - Flips a RGB or RGBA image.
+- [Image Resizer](#image-cropper) - Crops a RGB or RGBA image.
+- [TGA Maker](#tga-maker) - Create a TGA file from a RGB or RGBA image.
+- [PNG Maker](#png-maker) - Create a PNG file from a RGB or RGBA image. Build on [pngjs](https://github.com/pngjs/pngjs).
+- [zlib algo](#zlib) - Simple compression / decompresson zlib port of [pako](https://github.com/nodeca/pako) in typescript.
 
 ## Installation
 
@@ -286,7 +290,7 @@ Decodes compressed BC1-7 data. Source must be Uint8Array or Buffer. Returns the 
   </tr>
     <tr>
     <td align="center"><b>Name</td>
-    <td>decodeDXT7(<b>src, width, height</b>)</td>
+    <td>decodeBC7(<b>src, width, height</b>)</td>
     <td>Returns RGBA data.</td>
   </tr>
 </tbody>
@@ -630,9 +634,77 @@ Unswizzle data. Based on an xbox function. Only works for color profiles with pi
 </tbody>
 </table>
 
+## Image Flipper
+
+Flips image data of 24 or 32 bit profiles (needed for some types of image files). Source must be Uint8Array or Buffer. Returns the same type.
+
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th align="center">Functions (bold requires)</th>
+    <th align="left">Desc</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+    <td align="center"><b>Name</td>
+    <td>flipImage(<b>src, width, height,</b> is24)</td>
+    <td>Use is24 as <b>true</b> for 24 bit profiles</td>
+  </tr>
+</tbody>
+</table>
+
+## Image Cropper
+
+Crops image data. Bits per pixel must be supplied of source data. Source must be Uint8Array or Buffer. Returns the same type.
+
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th align="center">Functions (bold requires)</th>
+    <th align="left">Desc</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+    <td align="center"><b>Name</td>
+    <td>cropImage(<b>src, width, height, srcBitsPerPixel</b>)</td>
+    <td>Use is24 as <b>true</b> for 24 bit profiles</td>
+  </tr>
+</tbody>
+</table>
+
+## PNG Maker
+
+Simple PNG file maker (uses [pngjs](https://github.com/pngjs/pngjs)). Must be RGB8 or RGBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
+
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th align="center">Functions (bold requires)</th>
+    <th align="left">Desc</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+    <td align="center"><b>Name</td>
+    <td>makePNG(<b>src, width, height,</b> noAlpha)</td>
+    <td>Use noAlpha as <b>true</b> for 24 bit profiles</td>
+  </tr>
+  <tr>
+    <td align="center"><b>Name</td>
+    <td>readPNG(<b>src)</td>
+    <td>Reads .png file and returns meta data like height and width and the unzipped data. Must be Uint8Array or Buffer.</td>
+  </tr>
+</tbody>
+</table>
+
 ## TGA Maker
 
-Simple TGA file maker. Must be RGB8 or RBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
+Simple TGA file maker. Must be RGB8 or RGBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
 
 <table>
 <thead>
@@ -646,10 +718,14 @@ Simple TGA file maker. Must be RGB8 or RBA8 profile. Source must be Uint8Array o
 <tr>
     <td align="center"><b>Name</td>
     <td>makeTGA(<b>src, width, height,</b> noAlpha)</td>
-    <td>Use noAlpha as <b>true<b> for 24 bit profiles</td>
+    <td>Use noAlpha as <b>true</b> for 24 bit profiles</td>
   </tr>
 </tbody>
 </table>
+
+## zlib
+
+A Typescript port of [pako](https://github.com/nodeca/pako).  Functions `inflate`, `Inflate`, `deflate`, `Deflate`, `deflateRaw`, `inflateRaw`, `gzip`, `ungzip` See [documentation](https://github.com/nodeca/pako) for how functions work.
 
 ## Acknowledgements
 
