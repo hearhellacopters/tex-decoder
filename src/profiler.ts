@@ -123,7 +123,7 @@ const RG32I    = {order: "r32g32"      , value: SIGNED}
 const RGB32I   = {order: "r32g32b32"   , value: SIGNED}
 const RGBA32I  = {order: "r32g32b32a32", value: SIGNED}
 
-export const COLORPROFILE = {
+export const COLOR_PROFILE = {
     A8       ,      
     R8       ,
     G8       ,

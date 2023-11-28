@@ -9,7 +9,7 @@ export declare const BYTE_VALUE: {
     HALF_FLOAT: number;
     FLOAT: number;
 };
-export declare const COLORPROFILE: {
+export declare const COLOR_PROFILE: {
     A8: {
         order: string;
         value: number;

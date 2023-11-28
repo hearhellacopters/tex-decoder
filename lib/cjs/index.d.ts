@@ -8,8 +8,8 @@ export { decodeBC7 } from './bc7';
 export { getCRNMeta, decodeCRN } from './crn2';
 export { makeTGA, TGA_PROFILE } from './tga_maker';
 export { readPNG, makePNG, makePNG2 } from './png_maker';
-export { COLORPROFILE, BYTE_VALUE, convertProfile, } from './profiler';
+export { COLOR_PROFILE, BYTE_VALUE, convertProfile, } from './profiler';
 export { flipImage, cropImage } from './flipper';
 export { inflate, Inflate, deflate, Deflate, deflateRaw, inflateRaw, gzip, ungzip } from './deflate/index';
-export { unswizzle } from './unswizzling';
+export { unswizzle, mortonize, untile } from './unswizzling';
 //# sourceMappingURL=index.d.ts.map

@@ -1,11 +1,11 @@
 // Source :
 // https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/793354701f1ebe0a379e3d8524bdf8575eda4fd2/src/CxbxKrnl/EmuD3D8/Convert.cpp#L1339
 
-function isBuffer(obj: Buffer|Uint8Array): boolean {
+function isBuffer(obj: Buffer | Uint8Array): boolean {
     return (typeof Buffer !== 'undefined' && obj instanceof Buffer);
 }
 
-function isArrayOrBuffer(obj:  Buffer|Uint8Array): boolean {
+function isArrayOrBuffer(obj: Buffer | Uint8Array): boolean {
     return obj instanceof Uint8Array || isBuffer(obj);
 }
 
@@ -22,48 +22,47 @@ function isArrayOrBuffer(obj:  Buffer|Uint8Array): boolean {
  * @returns 
  */
 export function unswizzle
-(
-	/*CONST PVOID*/ src:Uint8Array|Buffer,
-	/*CONST DWORD*/ width:number,
-	/*CONST DWORD*/ height:number,
-	/*CONST DWORD*/ depth:number,
-	/*CONST DWORD*/ bytesPerPixel:number,
-	/*CONST DWORD*/ dstRowPitch:number,
-	/*CONST DWORD*/ dstSlicePitch:number
-) 
-{
-    if(!isArrayOrBuffer(src)){
+    (
+	/*CONST PVOID*/ src: Uint8Array | Buffer,
+	/*CONST DWORD*/ width: number,
+	/*CONST DWORD*/ height: number,
+	/*CONST DWORD*/ depth: number,
+	/*CONST DWORD*/ bytesPerPixel: number,
+	/*CONST DWORD*/ dstRowPitch: number,
+	/*CONST DWORD*/ dstSlicePitch: number
+    ) {
+    if (!isArrayOrBuffer(src)) {
         throw new Error(`Source data must be Uint8Array or Buffer`)
     }
-    if(bytesPerPixel<=0||bytesPerPixel==3||bytesPerPixel>4){
-        throw new Error(`Bytes per pixel must be 1, 2 or 4. Got `+bytesPerPixel)
+    if (bytesPerPixel <= 0 || bytesPerPixel == 3 || bytesPerPixel > 4) {
+        throw new Error(`Bytes per pixel must be 1, 2 or 4. Got ` + bytesPerPixel)
     }
-	//DWORD 
+    //DWORD 
     const dwMaskX = new Int32Array([0]), dwMaskY = new Int32Array([0]), dwMaskZ = new Int32Array([0]);
 
-	for (var i=1, j=1; (i < width) || (i < height) || (i < depth); i <<= 1) {
-		if (i < width) {
-			dwMaskX[0] |= j;
-			j <<= 1;
-		}
+    for (var i = 1, j = 1; (i < width) || (i < height) || (i < depth); i <<= 1) {
+        if (i < width) {
+            dwMaskX[0] |= j;
+            j <<= 1;
+        }
 
-		if (i < height) {
-			dwMaskY[0] |= j;
-			j <<= 1;
-		}
+        if (i < height) {
+            dwMaskY[0] |= j;
+            j <<= 1;
+        }
 
-		if (i < depth) {
-			dwMaskZ[0] |= j;
-			j <<= 1;
-		}
-	}
-//DWORD 
-	const dwStartX = 0;
-	const dwStartY = 0;
-	const dwStartZ = 0;
+        if (i < depth) {
+            dwMaskZ[0] |= j;
+            j <<= 1;
+        }
+    }
+    //DWORD 
+    const dwStartX = 0;
+    const dwStartY = 0;
+    const dwStartZ = 0;
 
-	const dwZ = new Int32Array([dwStartZ]);;
-	switch (bytesPerPixel) {
+    const dwZ = new Int32Array([dwStartZ]);;
+    switch (bytesPerPixel) {
         case 1: {
             const pSrc = src; //(uint8_t *)
             const pDstBuff = new Uint8Array(src.length)
@@ -91,7 +90,7 @@ export function unswizzle
                 pDestSlice += dstSlicePitch; // / 1; // = / dwBPP; // step to next level in destination
                 dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0]; // step to next level in source
             }
-            if(isBuffer(src)){
+            if (isBuffer(src)) {
                 return Buffer.from(pDstBuff.buffer)
             }
             return pDstBuff
@@ -101,7 +100,7 @@ export function unswizzle
             const pSrc = new Uint16Array(src.buffer); //(uint16_t *);
             const pDstBuff = new Uint8Array(src.length / 2)
             var pDestSlice = 0; //(uint16_t *pDstBuff);
-            
+
             for (var z = 0; z < depth; z++) {
                 var pDestRow = pDestSlice; //(uint16_t *)
                 //DWORD
@@ -124,7 +123,7 @@ export function unswizzle
                 pDestSlice += dstSlicePitch / 2; // = dwBPP; // step to next level in destination
                 dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0]; // step to next level in source
             }
-            if(isBuffer(src)){
+            if (isBuffer(src)) {
                 return Buffer.from(pDstBuff.buffer)
             }
             return new Uint8Array(pDstBuff.buffer)
@@ -133,7 +132,7 @@ export function unswizzle
         case 4: {
             const pSrc = new Uint32Array(src.buffer);;//(uint32_t *;
             const pDstBuff = new Uint32Array(src.length / 4)
-            var pDestSlice = 0 ;//(uint32_t *);
+            var pDestSlice = 0;//(uint32_t *);
 
             for (var z = 0; z < depth; z++) {
                 var pDestRow = pDestSlice; //uint32_t *;
@@ -157,7 +156,7 @@ export function unswizzle
                 pDestSlice += dstSlicePitch / 4; // = dwBPP; // step to next level in destination
                 dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0]; // step to next level in source
             }
-            if(isBuffer(src)){
+            if (isBuffer(src)) {
                 return Buffer.from(pDstBuff.buffer)
             }
             return new Uint8Array(pDstBuff.buffer)
@@ -166,19 +165,194 @@ export function unswizzle
         default:
             return src;
             break;
-	}
+    }
 } // EmuUnswizzleBox NOPATCH
 
-// source
-// https://github.com/yuzu-emu/yuzu/blob/43be2bfe332d5537041262eb08037993239eaf5f/src/video_core/textures/decoders.h
-// https://github.com/ScanMountGoat/tegra_swizzle/tree/main
-function MakeSwizzleTable() {
-    const table = Array.from({ length: 8 }, () => new Uint32Array(64));
-    for (var y = 0; y < 8; ++y) {
-        for (var x = 0; x < 64; ++x) {
-            table[y][x] = ((x % 64) / 32) * 256 + ((y % 8) / 2) * 64 + ((x % 32) / 16) * 32 +
-                          (y % 2) * 16 + (x % 16);
+function memcpy(
+    dest: Uint8Array | Buffer, 
+    dst_start: number, 
+    src: Uint8Array | Buffer, 
+    src_start: number, 
+    size: number) {
+    for (let i = dst_start; i < size; i++) {
+        dest[i] = src[src_start];
+        src_start++;
+    }
+}
+
+// Source
+//https://github.com/VitaSmith/gust_tools/blob/master/gust_g1t.c#L954
+
+/**
+ * Untile image data.
+ * 
+ * @param {Uint8Array|Buffer} src - Source data as ``Uint8Array`` or ``Buffer``. Will return the same.
+ * @param {number} bytesPerBlock - Bytes per block. In compressed data it's the block size. In raw data it's the bytes per pixel.
+ * @param {number} pixelBlockWidth - Pixel width of the block data. Normally 4. But in raw it's 1.
+ * @param {number} pixelBlockHeigth - Pixel Heigth of the block data. Normally 4. But in raw it's 1.
+ * @param {number} tileSize - Normally the "packed" width value or Math.log2(width)
+ * @param {number} width - Image width size
+ * @returns ``Uint8Array`` | ``Buffer``
+ */
+export function untile(
+    src: Uint8Array | Buffer,
+    bytesPerBlock: number,
+    pixelBlockWidth: number,
+    pixelBlockHeigth: number,
+    tileSize: number,
+    width: number) {
+    if (!isArrayOrBuffer(src)) {
+        throw new Error(`Source data must be Uint8Array or Buffer`)
+    }
+    const bytes_per_element = bytesPerBlock;
+    const size = src.length;
+    var tile_width = tileSize / pixelBlockWidth;
+    var tile_heigth = tileSize / pixelBlockHeigth;
+    width /= pixelBlockWidth;
+    var temp;
+    if (isBuffer(src)) {
+        temp = Buffer.alloc(size);
+    } else {
+        temp = new Uint8Array(size);
+    }
+
+    for (var i = 0; i < Math.floor(size / bytes_per_element / tile_width / tile_heigth); i++) {
+        var tile_row = Math.floor(i / (width / tile_width));
+        var tile_column = Math.floor(i % (width / tile_heigth));
+        var tile_start = Math.floor(tile_row * width * tile_width + tile_column * tile_heigth);
+        for (var j = 0; j < tile_width; j++) {
+            memcpy(temp, bytes_per_element * (tile_start + j * width),
+                src, bytes_per_element * (i * tile_width * tile_heigth + j * tile_width),
+                tile_width * bytes_per_element);
         }
     }
-    return table;
+    return temp;
+}
+
+// "Inflate" a 32 bit value by interleaving 0 bits at odd positions.
+function inflate_bits(x:number)
+{
+    x &= 0x0000FFFF;
+    x = (x | (x << 8))  & 0x00FF00FF;
+    x = (x | (x << 4))  & 0x0F0F0F0F;
+    x = (x | (x << 2))  & 0x33333333;
+    x = (x | (x << 1))  & 0x55555555;
+    return x;
+}
+
+// "Deflate" a 32-bit value by deinterleaving all odd bits.
+function deflate_bits(x:number)
+{
+    x &= 0x55555555;
+    x = (x | (x >> 1))  & 0x33333333;
+    x = (x | (x >> 2))  & 0x0F0F0F0F;
+    x = (x | (x >> 4))  & 0x00FF00FF;
+    x = (x | (x >> 8))  & 0x0000FFFF;
+    return x;
+}
+
+// From two 32-bit (x,y) coordinates, compute the 64-bit Morton (or Z-order) value.
+function xy_to_morton(x:number, y:number)
+{
+    return (inflate_bits(x) << 1) | (inflate_bits(y) << 0);
+}
+
+// Fom a 32-bit Morton (Z-order) value, recover two 32-bit (x,y) coordinates.
+function morton_to_xy(z:number, x:Uint32Array, y:Uint32Array)
+{
+    x[0] = deflate_bits(z >> 1);
+    y[0] = deflate_bits(z >> 0);
+}
+
+/**
+ * Mortonize image data.
+ * 
+ * @param {Uint8Array|Buffer} src - Source data as ``Uint8Array`` or ``Buffer``. Will return the same.
+ * @param {number} packedBitsPerPixel - Packed bits per pixel.
+ * @param {number} pixelBlockWidth - Pixel width of the block data. Normally 4. But in raw it's 1.
+ * @param {number} pixelBlockHeigth - Pixel Heigth of the block data. Normally 4. But in raw it's 1.
+ * @param {number} width - Image width
+ * @param {number} height - Image hidth
+ * @param {number} mortonOrder - Morton Order
+ * @param {number} widthFactor - Normally 1 but depends on the system.
+ * @returns ``Uint8Array`` | ``Buffer``
+ * */ 
+export function mortonize(
+    src:Uint8Array|Buffer, 
+    packedBitsPerPixel:number, 
+    pixelBlockWidth:number, 
+    pixelBlockHeigth:number, 
+    mortonOrder:number,
+    width:number, 
+    height:number, 
+    widthFactor:number) {
+    if (!isArrayOrBuffer(src)) {
+        throw new Error(`Source data must be Uint8Array or Buffer`)
+    }
+    //const uint32_t bits_per_element = dds_bpp(format) * dds_bwh(format) * dds_bwh(format) * wf;
+    const bits_per_element = packedBitsPerPixel * pixelBlockWidth * pixelBlockHeigth * widthFactor; //aka block size
+    const bytes_per_element = Math.floor(bits_per_element / 8);
+    width /= pixelBlockWidth * widthFactor;
+    height /= pixelBlockHeigth;
+    var size = src.length
+        var num_elements = src.length / bytes_per_element;
+        var k = Math.abs(mortonOrder);
+        var reverse = (mortonOrder != k);
+
+    // Only deal with elements that are multiple of one byte in size
+    if(!(bits_per_element % 8 == 0)){
+        throw new Error("asset(bits_per_element % 8 == 0)")
+    }
+    // Validate that the size of the buffer matches the dimensions provided
+    if(!(bytes_per_element * width * height == size)){
+        throw new Error("asset(bytes_per_element * width * height == size)")
+    }
+    // Only deal with texture that are smaller than 64k*64k
+    if(!(width < 0x10000) && (height < 0x10000)){
+        throw new Error("asset((width < 0x10000) && (height < 0x10000))")
+    }
+    // Ensure that width and height are an exact multiple of 2^k
+    if(!(width % (1 << k) == 0)){
+        throw new Error("asset(width % (1 << k) == 0)")
+    }
+    if(!(height % (1 << k) == 0)){
+        throw new Error("asset(height % (1 << k) == 0)")
+    }
+    // Ensure that we won't produce x or y that are larger than the maximum dimension
+    if(!(k <= Math.log2(Math.max(width, height)))){
+        throw new Error(`assert(k <= Math.log2(Math.max(width, height))))`)
+    }
+        var tile_width = 1 << k;
+        var tile_size = tile_width * tile_width;
+        var mask = tile_size - 1;
+        var tmp_buf;
+        if (isBuffer(src)) {
+            tmp_buf = Buffer.alloc(size);
+        } else {
+            tmp_buf = new Uint8Array(size);
+        }
+    for (var i = 0; i < num_elements; i++) {
+        var j = new Uint32Array([0]);
+        var x = new Uint32Array([0]);
+        var y = new Uint32Array([0]);
+        if (reverse) {  // Morton value to an (x,y) pair
+            // Recover (x,y) for the Morton tile
+            morton_to_xy(i & mask, x, y);
+            // Now apply untiling by offsetting (x,y) with the tile positiom
+            x[0] += ((i / tile_size) % (width / tile_width)) * tile_width;
+            y[0] += ((i / tile_size) / (width / tile_width)) * tile_width;
+            j[0] = y[0] * width + x[0];
+        } else {        // Morton value from an (x,y) pair
+            x[0] = i % width; y[0] = i / width;
+            j[0] = xy_to_morton(x[0], y[0]) & mask;
+            // Now, apply tiling. This is accomplished by offseting our value
+            // with the current tile position multiplied by the tile size.
+            j[0] += ((y[0] / tile_width) * (width / tile_width) + (x[0] / tile_width)) * tile_size;
+        }
+        if(!(j[0] < num_elements)){
+            throw new Error("asset(j < num_elements)")
+        }
+        memcpy(tmp_buf, j[0] * bytes_per_element, src, i * bytes_per_element, bytes_per_element);
+    }
+    return tmp_buf
 }

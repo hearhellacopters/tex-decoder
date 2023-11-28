@@ -16,9 +16,9 @@ Fully supports the following formats:
 Also includes:
 
 - [Color Profile Converter](#color-profile-converter) - Convert an image color profile.
-- [Unswizzler](#unswizzler) - Unswizzler image data based on 1, 2 or 4 bytes.
+- [Unswizzler](#unswizzler) - Unswizzle, untile or mortonize image data.
 - [Image Flipper](#image-flipper) - Flips a RGB or RGBA image.
-- [Image Resizer](#image-cropper) - Crops a RGB or RGBA image.
+- [Image Cropper](#image-cropper) - Crops a RGB or RGBA image.
 - [TGA Maker](#tga-maker) - Create a TGA file from a RGB or RGBA image.
 - [PNG Maker](#png-maker) - Create a PNG file from a RGB or RGBA image. Build on [pngjs](https://github.com/pngjs/pngjs).
 - [zlib algo](#zlib) - Simple compression / decompresson zlib port of [pako](https://github.com/nodeca/pako) in typescript.
@@ -510,7 +510,7 @@ Data must be a vaild [.crn](https://www.sweetscape.com/010editor/repository/file
 
 ## Color Profile Converter
 
-Converts the data's color profile bit order and data type. You can use supplied ```COLORPROFILE``` profiles or create your own. You can use ```BYTE_VALUE``` to help create your own. Read how below. Source must be Uint8Array or Buffer. Returns the same type.
+Converts the data's color profile bit order and data type. You can use supplied ```COLOR_PROFILE``` profiles or create your own. You can use ```BYTE_VALUE``` to help create your own. Read how below. Source must be Uint8Array or Buffer. Returns the same type.
 
 <table>
 <thead>
@@ -528,7 +528,7 @@ Converts the data's color profile bit order and data type. You can use supplied 
   </tr>
   <tr>
     <td align="center"><b>Color Profiles</b></td>
-    <td>COLORPROFILE = {<br>
+    <td>COLOR_PROFILE = {<br>
     A8, <br>
     R8, <br>
     G8, <br>
@@ -610,7 +610,7 @@ Converts the data's color profile bit order and data type. You can use supplied 
 
 ## Unswizzler
 
-Unswizzle data. Based on an xbox function. Only works for color profiles with pixels the size of 1, 2 or 4 btyes. Source must be Uint8Array or Buffer. Returns the same type.
+Unswizzle, untile or mortonize data. Source must be Uint8Array or Buffer. Returns the same type.
 
 <table>
 <thead>
@@ -628,8 +628,13 @@ Unswizzle data. Based on an xbox function. Only works for color profiles with pi
   </tr>
   <tr>
     <td align="center"><b>Name</td>
-    <td>flipImage(<b>src, width, height</b>, is24)</td>
-    <td>Simple image fliper. Works with 24 and 32 bit profiles (default 32).</td>
+    <td>untile(<b>src, bytesPerBlock, pixelBlockWidth, pixelBlockHeigth, tileSize, width</b>)</td>
+    <td>Untile block image data. pixelBlockWidth and pixelBlockHeigth are normally 4 unless the image is raw, then it's 1.</td>
+  </tr>
+  <tr>
+    <td align="center"><b>Name</td>
+    <td>mortonize(<b>src, packedBitsPerPixel, pixelBlockWidth, pixelBlockHeigth, width, height, mortonOrder, widthFactor</b>)</td>
+    <td>Mortonize block image data. pixelBlockWidth and pixelBlockHeigth are normally 4 unless the image is raw, then it's 1. mortonOrder and widthFactor change depending on the system.</td>
   </tr>
 </tbody>
 </table>
@@ -676,6 +681,27 @@ Crops image data. Bits per pixel must be supplied of source data. Source must be
 </tbody>
 </table>
 
+## TGA Maker
+
+Simple TGA file maker. Must be RGB8 or RGBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
+
+<table>
+<thead>
+  <tr>
+    <th></th>
+    <th align="center">Functions (bold requires)</th>
+    <th align="left">Desc</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+    <td align="center"><b>Name</td>
+    <td>makeTGA(<b>src, width, height,</b> noAlpha)</td>
+    <td>Use noAlpha as <b>true</b> for 24 bit profiles</td>
+  </tr>
+</tbody>
+</table>
+
 ## PNG Maker
 
 Simple PNG file maker (uses [pngjs](https://github.com/pngjs/pngjs)). Must be RGB8 or RGBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
@@ -702,34 +728,13 @@ Simple PNG file maker (uses [pngjs](https://github.com/pngjs/pngjs)). Must be RG
 </tbody>
 </table>
 
-## TGA Maker
-
-Simple TGA file maker. Must be RGB8 or RGBA8 profile. Source must be Uint8Array or Buffer. Returns the same type.
-
-<table>
-<thead>
-  <tr>
-    <th></th>
-    <th align="center">Functions (bold requires)</th>
-    <th align="left">Desc</th>
-  </tr>
-</thead>
-<tbody>
-<tr>
-    <td align="center"><b>Name</td>
-    <td>makeTGA(<b>src, width, height,</b> noAlpha)</td>
-    <td>Use noAlpha as <b>true</b> for 24 bit profiles</td>
-  </tr>
-</tbody>
-</table>
-
 ## zlib
 
 A Typescript port of [pako](https://github.com/nodeca/pako).  Functions `inflate`, `Inflate`, `deflate`, `Deflate`, `deflateRaw`, `inflateRaw`, `gzip`, `ungzip` See [documentation](https://github.com/nodeca/pako) for how functions work.
 
 ## Acknowledgements
 
-This project was born from the desire to have a single library that could convert any image format. Having been using tools like [Noesis](https://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91) and [PVRTool](https://developer.imaginationtech.com/pvrtextool/) in the past, I wanted something I could translate quickly to a Node app and then use in a web site without having to redo work.
+This project was born from the desire to have a single library that could convert any image format. Having been using tools like [Noesis](https://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91) and [PVRTool](https://developer.imaginationtech.com/pvrtextool/) in the past, I wanted something I could translate quickly to a Node app and then use in a web site without having to redo work. Sources for all code can be found in comments.
 
 I'm happy to connect and grow this library if others find it useful. Pull requests or [bug reports](https://github.com/hearhellacopters/tex-decoder/issues) are welcome!
 

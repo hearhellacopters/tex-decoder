@@ -87,7 +87,7 @@ export {
     makePNG2
 } from './png_maker'
 export {
-    COLORPROFILE, 
+    COLOR_PROFILE, 
     BYTE_VALUE,
     convertProfile,
 } from './profiler';
@@ -106,5 +106,7 @@ export  {
     ungzip
 } from './deflate/index'
 export {
-    unswizzle
+    unswizzle,
+    mortonize,
+    untile
 } from './unswizzling';
