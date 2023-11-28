@@ -20,7 +20,7 @@ Also includes:
 - [Image Flipper](#image-flipper) - Flips a RGB or RGBA image.
 - [Image Cropper](#image-cropper) - Crops a RGB or RGBA image.
 - [TGA Maker](#tga-maker) - Create a TGA file from a RGB or RGBA image.
-- [PNG Maker](#png-maker) - Create a PNG file from a RGB or RGBA image. Build on [pngjs](https://github.com/pngjs/pngjs).
+- [PNG Maker](#png-maker) - Create a PNG file from a RGB or RGBA image. Built on [pngjs](https://github.com/pngjs/pngjs).
 - [zlib algo](#zlib) - Simple compression / decompresson zlib port of [pako](https://github.com/nodeca/pako) in typescript.
 
 ## Installation
