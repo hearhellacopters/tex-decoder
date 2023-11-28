@@ -84,7 +84,6 @@ export {
 export {
     readPNG,
     makePNG,
-    makePNG2
 } from './png_maker'
 export {
     COLOR_PROFILE, 
