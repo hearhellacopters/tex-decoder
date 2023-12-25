@@ -1,6 +1,7 @@
-import { deflate, inflate } from './deflate/index';
+//@FixImport
+import { deflate, inflate } from './deflate/index.js';
 import { bireader, biwriter } from 'bireader';
-const PNG = require('pngjs').PNG;
+import { PNG } from 'pngjs';
 
 function isBuffer(obj: Buffer | Uint8Array): boolean {
     return (typeof Buffer !== 'undefined' && obj instanceof Buffer);

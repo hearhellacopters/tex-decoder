@@ -1,16 +1,16 @@
 //source
 //https://docs.rs/crnlib/0.1.1/src/crnlib/unpack.rs.html
-
+//@FixImport
 import {
     decodeBC1,
     decodeBC2,
     decodeBC3,
-} from './dxt'
+} from './dxt.js'
 
 import {
     decodeBC4,
     decodeBC5
-} from './atc'
+} from './atc.js'
 
 const CRN_FORMATS: any = {
     0: "cCRNFmtDXT1", //BC1

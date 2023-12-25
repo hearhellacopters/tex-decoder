@@ -1,5 +1,3 @@
-import {flipImage} from './flipper';
-
 const RGB = 24;
 const RGBA = 32;
 
@@ -15,6 +13,29 @@ function arraybuffcheck(obj:  Buffer|Uint8Array): boolean {
 export const TGA_PROFILE ={
     RGB, 
     RGBA
+}
+
+function flipImage(src: Buffer | Uint8Array, width: number, height: number, is24?: boolean): Buffer | Uint8Array {
+    if (!arraybuffcheck(src)) {
+        throw new Error("Source must be Uint8Array or Buffer")
+    }
+    const output = isBuffer(src) ? Buffer.alloc(src.length) : new Uint8Array(src.length)
+    var z = 0
+    for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            var pos = (x + (height - y - 1) * width) << 2;
+            output[pos + 0] = src[z + 0] & 0xFF;
+            output[pos + 1] = src[z + 1] & 0xFF;
+            output[pos + 2] = src[z + 2] & 0xFF;
+            if (is24) {
+                z += 3
+            } else {
+                output[pos + 3] = src[z + 3] & 0xFF;
+                z += 4
+            }
+        }
+    }
+    return output;
 }
 
 /**

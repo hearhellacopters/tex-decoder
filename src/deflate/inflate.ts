@@ -16,11 +16,11 @@
 // 2. Altered source versions must be plainly marked as such, and must not be
 //   misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
-
-import { adler32 } from './adler32';
-import { crc32 } from './crc32';
-import { inflate_fast } from './inffast';
-import { inflate_table } from './inftrees';
+//@FixImport
+import { adler32 } from './adler32.js';
+import { crc32 } from './crc32.js';
+import { inflate_fast } from './inffast.js';
+import { inflate_table } from './inftrees.js';
 
 const CODES = 0;
 const LENS = 1;
@@ -29,7 +29,7 @@ const DISTS = 2;
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
 
-import {constants} from './constants';
+import {constants} from './constants.js';
 
 const {
     Z_FINISH, Z_BLOCK, Z_TREES,

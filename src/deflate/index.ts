@@ -1,5 +1,5 @@
-import * as zlib_deflate from './deflate';
-import * as zlib_inflate from './inflate';
+import * as zlib_deflate from './deflate.js';
+import * as zlib_inflate from './inflate.js';
 
 function assign(obj: object, ...sources: object[]):object  {
     while (sources.length) {
@@ -45,17 +45,17 @@ const utils = {
     flattenChunks
 };
 
-import * as strings from './strings';
-import {msg} from './messages';
-import { ZStream } from './zstream';
-import { GZheader } from './gzheader';
+import * as strings from './strings.js';
+import {msg} from './messages.js';
+import { ZStream } from './zstream.js';
+import { GZheader } from './gzheader.js';
 
 const toString = Object.prototype.toString;
 
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
-
-import {constants} from './constants'
+//@FixImport
+import {constants} from './constants.js'
 
 const {
     Z_NO_FLUSH, Z_SYNC_FLUSH, Z_FULL_FLUSH, Z_FINISH,
