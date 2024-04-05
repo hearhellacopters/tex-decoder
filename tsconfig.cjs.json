@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2020",
+      "esnext"
+    ],
+    "outDir": "./build/cjs",
+    "module": "commonjs",
+    "target": "ES2020",
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

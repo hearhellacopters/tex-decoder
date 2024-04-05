@@ -1,7 +1,7 @@
 //source 
 //https://docs.rs/texture2ddecoder/latest/src/texture2ddecoder/bcn/bc6.rs.html
 
-import {bireader} from 'bireader'
+import {bireader} from 'bireader';
 
 type bool = boolean;
 type usize = number;

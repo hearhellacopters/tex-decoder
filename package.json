@@ -1,27 +1,29 @@
 {
   "name": "tex-decoder",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Javascript texture data decoders with the need for WebGL",
-  "module": "lib/esm/index.mjs",
-  "main": "lib/cjs/index.cjs",
-  "type": "module",
+  "module": "build/esm/index.mjs",
+  "main": "build/cjs/index.cjs",
   "files": [
-    "lib"
+    "build"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hearhellacopters/tex-decoder.git"
   },
   "exports": {
-    ".": {
-      "import": "./lib/esm/index.mjs",
-      "require": "./lib/cjs/index.cjs"
-    },
-    "./*": "./*"
+    "./*": {
+      "types": "./build/types/index.d.ts",
+      "require": "./build/cjs/index.js",
+      "import": "./build/esm/index.js",
+      "default": "./build/esm/index.js"
+    }
   },
   "scripts": {
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "build:clean": "rmdir /S /Q build",
+    "build": "npm run build:clean && npm run compile && node prepare-package-json",
     "clean": "rmdir /S /Q lib",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run movem && npm run movec",
     "build:esm": "tsc --module esnext --outDir lib/esm",
     "movem": "mjs.bat",
     "movec": "cjs.bat",
