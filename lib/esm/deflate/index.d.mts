@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 import { ZStream } from './zstream.js';
 import { GZheader } from './gzheader.js';
 /**

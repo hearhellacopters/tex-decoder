@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 /**
  * Flips image data from straight 24 or 32 bit profiles (used in some types of image files)
  *

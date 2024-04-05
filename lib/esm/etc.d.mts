@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 /**
 * ```
 * 0  = ETC1_RGB;

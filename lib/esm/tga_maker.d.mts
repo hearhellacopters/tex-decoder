@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 export declare const TGA_PROFILE: {
     RGB: number;
     RGBA: number;

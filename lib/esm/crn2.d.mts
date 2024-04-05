@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 /**
  * Checks the crunched data and returns width, height, mipmaps, faces and format of compressed data.
  *

@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 /**
  * Decompress PVRTC 2bit data. Returns Buffer or Uint8Array based on source data type.
  *

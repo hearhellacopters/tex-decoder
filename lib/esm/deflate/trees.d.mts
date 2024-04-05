@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 type ZStream = {
     input: null | Uint8Array;
     output: null | Uint8Array;

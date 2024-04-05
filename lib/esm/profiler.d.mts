@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 interface COLOR_PROFILE {
     order: string;
     value: number;

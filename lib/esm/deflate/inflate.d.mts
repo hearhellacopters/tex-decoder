@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 interface StaticTreeDesc {
     static_tree: Array<number> | null;
     extra_bits: Uint8Array | null;

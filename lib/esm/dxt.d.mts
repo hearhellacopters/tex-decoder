@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 /**
  * Decompress BC1 data (aka DXT1). Returns Buffer or Uint8Array based on source data type.
  *

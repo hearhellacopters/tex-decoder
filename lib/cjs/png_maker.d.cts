@@ -44,5 +44,5 @@ export declare function makePNG2(src: Uint8Array | Buffer, width: number, height
  * @param {boolean} issRGB - if the color space is sRGB
  * @returns
  */
-export declare function makePNG(src: Uint8Array | Buffer, width: number, height: number, noAlpha?: boolean, issRGB?: boolean): any;
+export declare function makePNG(src: Uint8Array | Buffer, width: number, height: number, noAlpha?: boolean, issRGB?: boolean): Buffer;
 //# sourceMappingURL=png_maker.d.ts.map

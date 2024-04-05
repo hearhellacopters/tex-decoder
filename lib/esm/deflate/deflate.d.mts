@@ -1,4 +1,4 @@
-/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" />
 interface InflateState {
     strm: ZStream;
     mode: number;

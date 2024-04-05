@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "declaration": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "declarationMap": true,
     "sourceMap": true,
@@ -9,15 +10,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": false,
     "allowSyntheticDefaultImports":true,
-    "types": ["node"],
+    "types": ["node", "mocha"],
     "esModuleInterop": true,
-    "allowJs": true,
-    "checkJs": false,
-    "importHelpers": true,
     "outDir": "lib/"
   },
-  "include": [
-    "src/*"
+  "files": [
+    "src/index.ts"
   ],
   "compileOnSave": false
 }
