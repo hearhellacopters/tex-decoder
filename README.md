@@ -27,18 +27,18 @@ Also includes:
 
 ```npm install tex-decoder```
 
-Provides both CommonJS and ES modules.
+Provides ES module only.
 
 ## Example
 
 Decoding ETC data with supplied format selector and create a TGA file.
 
 ```javascript
-const {
+import {
     decodeETC,
     ETC_FORMAT,
     makeTGA
-    } = require('tex-decoder');
+    } from 'tex-decoder';
 
 //read file data
 const data = fs.readFileSync(__dirname + '/ETC2_RGBA8_image.bin');

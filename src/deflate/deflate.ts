@@ -19,15 +19,15 @@
 //   misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 //@FixImport
-import { _tr_init, _tr_stored_block, _tr_flush_block, _tr_tally, _tr_align } from './trees';
-import { adler32 } from './adler32';
-import { crc32 } from './crc32';
-import {msg} from './messages';
+import { _tr_init, _tr_stored_block, _tr_flush_block, _tr_tally, _tr_align } from './trees.js';
+import { adler32 } from './adler32.js';
+import { crc32 } from './crc32.js';
+import {msg} from './messages.js';
 
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
 
-import {constants} from './constants';
+import {constants} from './constants.js';
 
 const {
     Z_NO_FLUSH, Z_PARTIAL_FLUSH, Z_FULL_FLUSH, Z_FINISH, Z_BLOCK,

@@ -1,0 +1,239 @@
+function isBuffer(obj) {
+    return (typeof Buffer !== 'undefined' && obj instanceof Buffer);
+}
+function isArrayOrBuffer(obj) {
+    return obj instanceof Uint8Array || isBuffer(obj);
+}
+export function unswizzle(src, width, height, depth, bytesPerPixel, dstRowPitch, dstSlicePitch) {
+    if (!isArrayOrBuffer(src)) {
+        throw new Error(`Source data must be Uint8Array or Buffer`);
+    }
+    if (bytesPerPixel <= 0 || bytesPerPixel == 3 || bytesPerPixel > 4) {
+        throw new Error(`Bytes per pixel must be 1, 2 or 4. Got ` + bytesPerPixel);
+    }
+    const dwMaskX = new Int32Array([0]), dwMaskY = new Int32Array([0]), dwMaskZ = new Int32Array([0]);
+    for (var i = 1, j = 1; (i < width) || (i < height) || (i < depth); i <<= 1) {
+        if (i < width) {
+            dwMaskX[0] |= j;
+            j <<= 1;
+        }
+        if (i < height) {
+            dwMaskY[0] |= j;
+            j <<= 1;
+        }
+        if (i < depth) {
+            dwMaskZ[0] |= j;
+            j <<= 1;
+        }
+    }
+    const dwStartX = 0;
+    const dwStartY = 0;
+    const dwStartZ = 0;
+    const dwZ = new Int32Array([dwStartZ]);
+    ;
+    switch (bytesPerPixel) {
+        case 1: {
+            const pSrc = src;
+            const pDstBuff = new Uint8Array(src.length);
+            var pDestSlice = 0;
+            for (var z = 0; z < depth; z++) {
+                var pDestRow = pDestSlice;
+                const dwY = new Int32Array([dwStartY]);
+                for (var y = 0; y < height; y++) {
+                    const dwYZ = new Int32Array([dwY[0] | dwZ[0]]);
+                    const dwX = new Int32Array([dwStartX]);
+                    for (var x = 0; x < width; x++) {
+                        const delta = new Uint32Array([dwX[0] | dwYZ[0]]);
+                        pDstBuff[pDestRow + x] = pSrc[delta[0]];
+                        dwX[0] = (dwX[0] - dwMaskX[0]) & dwMaskX[0];
+                    }
+                    pDestRow += dstRowPitch;
+                    dwY[0] = (dwY[0] - dwMaskY[0]) & dwMaskY[0];
+                }
+                pDestSlice += dstSlicePitch;
+                dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0];
+            }
+            if (isBuffer(src)) {
+                return Buffer.from(pDstBuff.buffer);
+            }
+            return pDstBuff;
+            break;
+        }
+        case 2: {
+            const pSrc = new Uint16Array(src.buffer);
+            const pDstBuff = new Uint8Array(src.length / 2);
+            var pDestSlice = 0;
+            for (var z = 0; z < depth; z++) {
+                var pDestRow = pDestSlice;
+                const dwY = new Int32Array([dwStartY]);
+                for (var y = 0; y < height; y++) {
+                    const dwYZ = new Int32Array([dwY[0] | dwZ[0]]);
+                    const dwX = new Int32Array([dwStartX]);
+                    for (var x = 0; x < width; x++) {
+                        const delta = new Uint32Array([dwX[0] | dwYZ[0]]);
+                        pDstBuff[pDestRow + x] = pSrc[delta[0]];
+                        dwX[0] = (dwX[0] - dwMaskX[0]) & dwMaskX[0];
+                    }
+                    pDestRow += dstRowPitch / 2;
+                    dwY[0] = (dwY[0] - dwMaskY[0]) & dwMaskY[0];
+                }
+                pDestSlice += dstSlicePitch / 2;
+                dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0];
+            }
+            if (isBuffer(src)) {
+                return Buffer.from(pDstBuff.buffer);
+            }
+            return new Uint8Array(pDstBuff.buffer);
+            break;
+        }
+        case 4: {
+            const pSrc = new Uint32Array(src.buffer);
+            ;
+            const pDstBuff = new Uint32Array(src.length / 4);
+            var pDestSlice = 0;
+            for (var z = 0; z < depth; z++) {
+                var pDestRow = pDestSlice;
+                const dwY = new Int32Array([dwStartY]);
+                for (var y = 0; y < height; y++) {
+                    const dwYZ = new Int32Array([dwY[0] | dwZ[0]]);
+                    const dwX = new Int32Array([dwStartX]);
+                    for (var x = 0; x < width; x++) {
+                        const delta = new Uint32Array([dwX[0] | dwYZ[0]]);
+                        pDstBuff[pDestRow + x] = pSrc[delta[0]];
+                        dwX[0] = (dwX[0] - dwMaskX[0]) & dwMaskX[0];
+                    }
+                    pDestRow += dstRowPitch / 4;
+                    dwY[0] = (dwY[0] - dwMaskY[0]) & dwMaskY[0];
+                }
+                pDestSlice += dstSlicePitch / 4;
+                dwZ[0] = (dwZ[0] - dwMaskZ[0]) & dwMaskZ[0];
+            }
+            if (isBuffer(src)) {
+                return Buffer.from(pDstBuff.buffer);
+            }
+            return new Uint8Array(pDstBuff.buffer);
+            break;
+        }
+        default:
+            return src;
+            break;
+    }
+}
+function memcpy(dest, dst_start, src, src_start, size) {
+    for (let i = dst_start; i < size; i++) {
+        dest[i] = src[src_start];
+        src_start++;
+    }
+}
+export function untile(src, bytesPerBlock, pixelBlockWidth, pixelBlockHeigth, tileSize, width) {
+    if (!isArrayOrBuffer(src)) {
+        throw new Error(`Source data must be Uint8Array or Buffer`);
+    }
+    const bytes_per_element = bytesPerBlock;
+    const size = src.length;
+    var tile_width = tileSize / pixelBlockWidth;
+    var tile_heigth = tileSize / pixelBlockHeigth;
+    width /= pixelBlockWidth;
+    var temp;
+    if (isBuffer(src)) {
+        temp = Buffer.alloc(size);
+    }
+    else {
+        temp = new Uint8Array(size);
+    }
+    for (var i = 0; i < Math.floor(size / bytes_per_element / tile_width / tile_heigth); i++) {
+        var tile_row = Math.floor(i / (width / tile_width));
+        var tile_column = Math.floor(i % (width / tile_heigth));
+        var tile_start = Math.floor(tile_row * width * tile_width + tile_column * tile_heigth);
+        for (var j = 0; j < tile_width; j++) {
+            memcpy(temp, bytes_per_element * (tile_start + j * width), src, bytes_per_element * (i * tile_width * tile_heigth + j * tile_width), tile_width * bytes_per_element);
+        }
+    }
+    return temp;
+}
+function inflate_bits(x) {
+    x &= 0x0000FFFF;
+    x = (x | (x << 8)) & 0x00FF00FF;
+    x = (x | (x << 4)) & 0x0F0F0F0F;
+    x = (x | (x << 2)) & 0x33333333;
+    x = (x | (x << 1)) & 0x55555555;
+    return x;
+}
+function deflate_bits(x) {
+    x &= 0x55555555;
+    x = (x | (x >> 1)) & 0x33333333;
+    x = (x | (x >> 2)) & 0x0F0F0F0F;
+    x = (x | (x >> 4)) & 0x00FF00FF;
+    x = (x | (x >> 8)) & 0x0000FFFF;
+    return x;
+}
+function xy_to_morton(x, y) {
+    return (inflate_bits(x) << 1) | (inflate_bits(y) << 0);
+}
+function morton_to_xy(z, x, y) {
+    x[0] = deflate_bits(z >> 1);
+    y[0] = deflate_bits(z >> 0);
+}
+export function mortonize(src, packedBitsPerPixel, pixelBlockWidth, pixelBlockHeigth, mortonOrder, width, height, widthFactor) {
+    if (!isArrayOrBuffer(src)) {
+        throw new Error(`Source data must be Uint8Array or Buffer`);
+    }
+    const bits_per_element = packedBitsPerPixel * pixelBlockWidth * pixelBlockHeigth * widthFactor;
+    const bytes_per_element = Math.floor(bits_per_element / 8);
+    width /= pixelBlockWidth * widthFactor;
+    height /= pixelBlockHeigth;
+    var size = src.length;
+    var num_elements = src.length / bytes_per_element;
+    var k = Math.abs(mortonOrder);
+    var reverse = (mortonOrder != k);
+    if (!(bits_per_element % 8 == 0)) {
+        throw new Error("asset(bits_per_element % 8 == 0)");
+    }
+    if (!(bytes_per_element * width * height == size)) {
+        throw new Error("asset(bytes_per_element * width * height == size)");
+    }
+    if (!(width < 0x10000) && (height < 0x10000)) {
+        throw new Error("asset((width < 0x10000) && (height < 0x10000))");
+    }
+    if (!(width % (1 << k) == 0)) {
+        throw new Error("asset(width % (1 << k) == 0)");
+    }
+    if (!(height % (1 << k) == 0)) {
+        throw new Error("asset(height % (1 << k) == 0)");
+    }
+    if (!(k <= Math.log2(Math.max(width, height)))) {
+        throw new Error(`assert(k <= Math.log2(Math.max(width, height))))`);
+    }
+    var tile_width = 1 << k;
+    var tile_size = tile_width * tile_width;
+    var mask = tile_size - 1;
+    var tmp_buf;
+    if (isBuffer(src)) {
+        tmp_buf = Buffer.alloc(size);
+    }
+    else {
+        tmp_buf = new Uint8Array(size);
+    }
+    for (var i = 0; i < num_elements; i++) {
+        var j = new Uint32Array([0]);
+        var x = new Uint32Array([0]);
+        var y = new Uint32Array([0]);
+        if (reverse) {
+            morton_to_xy(i & mask, x, y);
+            x[0] += ((i / tile_size) % (width / tile_width)) * tile_width;
+            y[0] += ((i / tile_size) / (width / tile_width)) * tile_width;
+            j[0] = y[0] * width + x[0];
+        }
+        else {
+            x[0] = i % width;
+            y[0] = i / width;
+            j[0] = xy_to_morton(x[0], y[0]) & mask;
+            j[0] += ((y[0] / tile_width) * (width / tile_width) + (x[0] / tile_width)) * tile_size;
+        }
+        if (!(j[0] < num_elements)) {
+            throw new Error("asset(j < num_elements)");
+        }
+        memcpy(tmp_buf, j[0] * bytes_per_element, src, i * bytes_per_element, bytes_per_element);
+    }
+    return tmp_buf;
+}
