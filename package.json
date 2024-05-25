@@ -1,8 +1,9 @@
 {
   "name": "tex-decoder",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Javascript texture data decoders with the need for WebGL",
-  "module": "build/esm/index.js",
+  "module": "build/index.js",
+  "main": "build/index.cjs",
   "type": "module",
   "files": [
     "build"
@@ -12,9 +13,11 @@
     "url": "git+https://github.com/hearhellacopters/tex-decoder.git"
   },
   "exports": {
-    "types": "./build/index.d.ts",
-    "require": "./build/index.cjs",
-    "import": "./build/index.js"
+    ".": {
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
+    },
+    "./*": "./*"
   },
   "scripts": {
     "compile": "rollup -c && rollup --config rollup.config.common.js",
