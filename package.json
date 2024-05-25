@@ -1,6 +1,6 @@
 {
   "name": "tex-decoder",
-  "version": "1.0.11",
+  "version": "1.0.14",
   "description": "Javascript texture data decoders with the need for WebGL",
   "module": "build/esm/index.js",
   "type": "module",
@@ -12,23 +12,17 @@
     "url": "git+https://github.com/hearhellacopters/tex-decoder.git"
   },
   "exports": {
-    ".": {
-      "import": {
-        "types": "./build/index.d.ts",
-        "default": "./build/index.js"
-      }
+    "./*": {
+      "types": "./build/index.d.ts",
+      "require": "./build/index.cjs",
+      "import": "./build/index.js"
     }
   },
   "scripts": {
-    "compile": "tsc && tsc-alias",
+    "compile": "rollup -c && rollup --config rollup.config.common.js",
     "build:clean": "rmdir /S /Q build",
     "build": "npm run build:clean && npm run compile",
-    "clean": "rmdir /S /Q lib",
-    "build:esm": "tsc --module esnext --outDir lib/esm",
-    "movem": "mjs.bat",
-    "movec": "cjs.bat",
-    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
-    "prepack": ""
+    "clean": "rmdir /S /Q lib"
   },
   "author": "HearHellacopters",
   "bugs": {
@@ -41,6 +35,8 @@
     "@types/node": "^20.8.6",
     "@types/pngjs": "^6.0.4",
     "@typescript/lib-dom": "npm:@types/web@^0.0.115",
+    "rollup": "^4.18.0",
+    "rollup-plugin-ts": "^3.4.5",
     "ts-loader": "^9.5.1",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
@@ -51,7 +47,6 @@
     "node": ">=12"
   },
   "dependencies": {
-    "bireader": "^1.0.54",
     "pngjs": "^7.0.0"
   }
 }

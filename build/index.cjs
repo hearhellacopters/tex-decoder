@@ -1,4 +1,6 @@
-import { PNG } from 'pngjs';
+'use strict';
+
+var pngjs = require('pngjs');
 
 function SHIFT(size, startpos) {
     return ((startpos) - (size) + 1);
@@ -14410,7 +14412,7 @@ function makePNG(src, width, height, noAlpha, issRGB) {
         alpha: COLORTYPE == CONSTANTS.COLORTYPE_COLOR_ALPHA ? true : false,
         colorType: COLORTYPE,
     };
-    const newfile = new PNG(options);
+    const newfile = new pngjs.PNG(options);
     if (issRGB) {
         newfile.gamma = CONSTANTS.GAMMA_DIVISION;
     }
@@ -14423,7 +14425,7 @@ function makePNG(src, width, height, noAlpha, issRGB) {
             newfile.data[idx + 3] = src[idx + 3];
         }
     }
-    return PNG.sync.write(newfile, options);
+    return pngjs.PNG.sync.write(newfile, options);
 }
 
 function isBuffer$2(obj) {
@@ -15076,4 +15078,78 @@ function mortonize(src, packedBitsPerPixel, pixelBlockWidth, pixelBlockHeigth, m
     return tmp_buf;
 }
 
-export { BYTE_VALUE, COLOR_PROFILE, Deflate, ETC_FORMAT, ETC_PROFILE, Inflate, TGA_PROFILE, convertProfile, cropImage, decodeASTC, decodeASTC_10x10, decodeASTC_10x5, decodeASTC_10x6, decodeASTC_10x8, decodeASTC_12x10, decodeASTC_12x12, decodeASTC_4x4, decodeASTC_5x4, decodeASTC_5x5, decodeASTC_6x5, decodeASTC_6x6, decodeASTC_8x5, decodeASTC_8x6, decodeASTC_8x8, decodeATC, decodeATC4, decodeATC8, decodeATI, decodeATI1, decodeATI2, decodeBC1, decodeBC2, decodeBC3, decodeBC4, decodeBC5, decodeBC6, decodeBC6H, decodeBC6S, decodeBC7, decodeCRN, decodeDXT1, decodeDXT2, decodeDXT3, decodeDXT4, decodeDXT5, decodeEACR11, decodeEACR11_SIGNED, decodeEACRG11, decodeEACRG11_SIGNED, decodeETC, decodeETC1RGB, decodeETC1RGBA, decodeETC2RGB, decodeETC2RGBA, decodeETC2RGBA1, decodeETC2sRGB, decodeETC2sRGBA1, decodeETC2sRGBA8, decodePVRTC, decodePVRTC2bit, decodePVRTC4bit, deflate, deflateRaw, flipImage, getCRNMeta, gzip, inflate, inflateRaw, makePNG, makeTGA, mortonize, readPNG, ungzip, unswizzle, untile };
+exports.BYTE_VALUE = BYTE_VALUE;
+exports.COLOR_PROFILE = COLOR_PROFILE;
+exports.Deflate = Deflate;
+exports.ETC_FORMAT = ETC_FORMAT;
+exports.ETC_PROFILE = ETC_PROFILE;
+exports.Inflate = Inflate;
+exports.TGA_PROFILE = TGA_PROFILE;
+exports.convertProfile = convertProfile;
+exports.cropImage = cropImage;
+exports.decodeASTC = decodeASTC;
+exports.decodeASTC_10x10 = decodeASTC_10x10;
+exports.decodeASTC_10x5 = decodeASTC_10x5;
+exports.decodeASTC_10x6 = decodeASTC_10x6;
+exports.decodeASTC_10x8 = decodeASTC_10x8;
+exports.decodeASTC_12x10 = decodeASTC_12x10;
+exports.decodeASTC_12x12 = decodeASTC_12x12;
+exports.decodeASTC_4x4 = decodeASTC_4x4;
+exports.decodeASTC_5x4 = decodeASTC_5x4;
+exports.decodeASTC_5x5 = decodeASTC_5x5;
+exports.decodeASTC_6x5 = decodeASTC_6x5;
+exports.decodeASTC_6x6 = decodeASTC_6x6;
+exports.decodeASTC_8x5 = decodeASTC_8x5;
+exports.decodeASTC_8x6 = decodeASTC_8x6;
+exports.decodeASTC_8x8 = decodeASTC_8x8;
+exports.decodeATC = decodeATC;
+exports.decodeATC4 = decodeATC4;
+exports.decodeATC8 = decodeATC8;
+exports.decodeATI = decodeATI;
+exports.decodeATI1 = decodeATI1;
+exports.decodeATI2 = decodeATI2;
+exports.decodeBC1 = decodeBC1;
+exports.decodeBC2 = decodeBC2;
+exports.decodeBC3 = decodeBC3;
+exports.decodeBC4 = decodeBC4;
+exports.decodeBC5 = decodeBC5;
+exports.decodeBC6 = decodeBC6;
+exports.decodeBC6H = decodeBC6H;
+exports.decodeBC6S = decodeBC6S;
+exports.decodeBC7 = decodeBC7;
+exports.decodeCRN = decodeCRN;
+exports.decodeDXT1 = decodeDXT1;
+exports.decodeDXT2 = decodeDXT2;
+exports.decodeDXT3 = decodeDXT3;
+exports.decodeDXT4 = decodeDXT4;
+exports.decodeDXT5 = decodeDXT5;
+exports.decodeEACR11 = decodeEACR11;
+exports.decodeEACR11_SIGNED = decodeEACR11_SIGNED;
+exports.decodeEACRG11 = decodeEACRG11;
+exports.decodeEACRG11_SIGNED = decodeEACRG11_SIGNED;
+exports.decodeETC = decodeETC;
+exports.decodeETC1RGB = decodeETC1RGB;
+exports.decodeETC1RGBA = decodeETC1RGBA;
+exports.decodeETC2RGB = decodeETC2RGB;
+exports.decodeETC2RGBA = decodeETC2RGBA;
+exports.decodeETC2RGBA1 = decodeETC2RGBA1;
+exports.decodeETC2sRGB = decodeETC2sRGB;
+exports.decodeETC2sRGBA1 = decodeETC2sRGBA1;
+exports.decodeETC2sRGBA8 = decodeETC2sRGBA8;
+exports.decodePVRTC = decodePVRTC;
+exports.decodePVRTC2bit = decodePVRTC2bit;
+exports.decodePVRTC4bit = decodePVRTC4bit;
+exports.deflate = deflate;
+exports.deflateRaw = deflateRaw;
+exports.flipImage = flipImage;
+exports.getCRNMeta = getCRNMeta;
+exports.gzip = gzip;
+exports.inflate = inflate;
+exports.inflateRaw = inflateRaw;
+exports.makePNG = makePNG;
+exports.makeTGA = makeTGA;
+exports.mortonize = mortonize;
+exports.readPNG = readPNG;
+exports.ungzip = ungzip;
+exports.unswizzle = unswizzle;
+exports.untile = untile;

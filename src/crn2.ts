@@ -35,7 +35,7 @@ const CRN_FORMATS: any = {
     15: "cCRNFmtTotal"
 }
 
-import { bireader, biwriter } from 'bireader';
+import { bireader, biwriter } from './bireader/bireader';
 
 type Palette = {
     offset: number;

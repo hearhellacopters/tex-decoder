@@ -1,7 +1,7 @@
 //source
 //https://github.com/BinomialLLC/basis_universal/blob/ad9386a4a1cf2a248f7bbd45f543a7448db15267/encoder/basisu_gpu_texture.cpp
 
-import {bireader} from 'bireader';
+import {bireader} from './bireader/bireader';
 
 class pvrtc2_block{
     public m : number

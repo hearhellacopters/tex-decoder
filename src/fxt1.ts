@@ -1,7 +1,7 @@
 //source
 //https://github.com/K0lb3/tex2img/blob/e041424880234d41ef16257ac5c9d773d65a2e7f/src/basisu/basisu_gpu_texture.cpp
 
-import {bireader} from 'bireader';
+import {bireader} from './bireader/bireader';
 
 type m_lo = {
     m_t00 : number;
