@@ -27,7 +27,7 @@ Also includes:
 
 ```npm install tex-decoder```
 
-Provides ES module only.
+Provides CommonJS and ES modules.
 
 ## Example
 
