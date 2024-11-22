@@ -1,5 +1,5 @@
-import * as zlib_deflate from './deflate.js';
-import * as zlib_inflate from './inflate.js';
+import * as zlib_deflate from './deflate';
+import * as zlib_inflate from './inflate';
 
 function assign(obj: object, ...sources: object[]):object  {
     while (sources.length) {

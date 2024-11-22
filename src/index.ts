@@ -14,7 +14,7 @@ import {
     decodeETC2sRGB,
     decodeETC2sRGBA1,
     decodeETC2sRGBA8
-    } from './etc.js';
+    } from './etc';
 import {
     decodeDXT1,
     decodeBC1,
@@ -24,7 +24,7 @@ import {
     decodeDXT4,
     decodeDXT5,
     decodeBC3,
-    } from './dxt.js';
+    } from './dxt';
 import {
     decodeATC,
     decodeATC4,
@@ -35,12 +35,12 @@ import {
     decodeBC4,
     decodeATI2,
     decodeBC5
-} from './atc.js';
+} from './atc';
 import {
     decodePVRTC,
     decodePVRTC4bit,
     decodePVRTC2bit
-    } from './pvrtc.js';
+    } from './pvrtc';
 import {
     decodeASTC,
 
@@ -58,42 +58,42 @@ import {
     decodeASTC_10x10,
     decodeASTC_12x10,
     decodeASTC_12x12,
-    } from './astc.js';
+    } from './astc';
 import {
     decodeBC6,
     decodeBC6H,
     decodeBC6S
-} from './bc6.js';
+} from './bc6';
 import {
     decodeBC7
-} from './bc7.js';
+} from './bc7';
 import {
     getCRNMeta,
     decodeCRN
-} from './crn2.js';
+} from './crn2';
 // export {
 //     decodeFXT1
-// } from './fxt1.ts'
+// } from './fxt1'
 // export {
 //     decodePVRTCII4bit
-// } from './pvrtcii.ts'
+// } from './pvrtcii'
 import {
     makeTGA, 
     TGA_PROFILE
-} from './tga_maker.js';
+} from './tga_maker';
 import {
     readPNG,
     makePNG,
-} from './png_maker.js'
+} from './png_maker'
 import {
     COLOR_PROFILE, 
     BYTE_VALUE,
     convertProfile,
-} from './profiler.js';
+} from './profiler';
 import {
     flipImage,
     cropImage
-} from './flipper.js';
+} from './flipper';
 import  {
     inflate,
     Inflate,
@@ -103,12 +103,12 @@ import  {
     inflateRaw,
     gzip,
     ungzip
-} from './deflate/index.js'
+} from './deflate/index'
 import {
     unswizzle,
     mortonize,
     untile
-} from './unswizzling.js';
+} from './unswizzling';
 
 export {
     ETC_PROFILE,

@@ -1,6 +1,6 @@
 import { deflate, inflate } from './deflate/index';
 import { PNG } from 'pngjs';
-import { bireader, biwriter } from './bireader/bireader';
+import { bireader, biwriter } from 'bireader';
 
 function isBuffer(obj: Buffer | Uint8Array): boolean {
     return (typeof Buffer !== 'undefined' && obj instanceof Buffer);

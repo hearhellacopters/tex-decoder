@@ -5,12 +5,12 @@ import {
     decodeBC1,
     decodeBC2,
     decodeBC3,
-} from './dxt.js'
+} from './dxt'
 
 import {
     decodeBC4,
     decodeBC5
-} from './atc.js'
+} from './atc'
 
 const CRN_FORMATS: any = {
     0: "cCRNFmtDXT1", //BC1
@@ -35,7 +35,7 @@ const CRN_FORMATS: any = {
     15: "cCRNFmtTotal"
 }
 
-import { bireader, biwriter } from './bireader/bireader';
+import { bireader, biwriter } from 'bireader';
 
 type Palette = {
     offset: number;

@@ -1,7 +1,7 @@
 //source
 //https://docs.rs/texture2ddecoder/latest/src/texture2ddecoder/bcn/bc7.rs.html
 
-import {bireader} from './bireader/bireader';
+import {bireader} from 'bireader';
 
 type usize = number;
 type u8 = number;

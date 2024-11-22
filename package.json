@@ -1,10 +1,9 @@
 {
   "name": "tex-decoder",
-  "version": "1.0.16",
-  "description": "Javascript texture data decoders with the need for WebGL",
-  "module": "build/index.js",
-  "main": "build/index.cjs",
-  "type": "module",
+  "version": "1.0.17",
+  "description": "Javascript texture data decoders without the need for WebGL",
+  "module": "build/esm/index.js",
+  "main": "build/cjs/index.js",
   "files": [
     "build"
   ],
@@ -14,16 +13,16 @@
   },
   "exports": {
     ".": {
-      "import": "./build/index.js",
-      "require": "./build/index.cjs"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./*": "./*"
   },
   "scripts": {
-    "compile": "rollup -c && rollup --config rollup.config.common.js",
-    "build:clean": "rmdir /S /Q build",
-    "build": "npm run build:clean && npm run compile",
-    "clean": "rmdir /S /Q lib"
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --moduleResolution NodeNext --module NodeNext --outDir build/esm",
+    "build:cjs": "tsc --moduleResolution node --module commonjs --outDir build/cjs",
+    "clean": "rmdir /S /Q build"
   },
   "author": "HearHellacopters",
   "bugs": {
@@ -36,8 +35,6 @@
     "@types/node": "^20.8.6",
     "@types/pngjs": "^6.0.4",
     "@typescript/lib-dom": "npm:@types/web@^0.0.115",
-    "rollup": "^4.18.0",
-    "rollup-plugin-ts": "^3.4.5",
     "ts-loader": "^9.5.1",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
@@ -48,6 +45,7 @@
     "node": ">=12"
   },
   "dependencies": {
+    "bireader": "^1.0.59",
     "pngjs": "^7.0.0"
   }
 }
