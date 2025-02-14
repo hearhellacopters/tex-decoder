@@ -16,6 +16,21 @@ import {
     decodeETC2sRGBA8
     } from './etc';
 import {
+    encodeETC,
+    encodeETC1RGB,
+    encodeETC1RGBA,
+    encodeEACR11,
+    encodeEACR11_SIGNED,
+    encodeEACRG11,
+    encodeEACRG11_SIGNED,
+    encodeETC2RGB,
+    encodeETC2RGBA,
+    encodeETC2RGBA1,
+    encodeETC2sRGB,
+    encodeETC2sRGBA1,
+    encodeETC2sRGBA8,
+} from './etcpack';
+import {
     decodeDXT1,
     decodeBC1,
     decodeDXT2,
@@ -126,6 +141,20 @@ export {
     decodeETC2sRGB,
     decodeETC2sRGBA1,
     decodeETC2sRGBA8,
+
+    encodeETC,
+    encodeETC1RGB,
+    encodeETC1RGBA,
+    encodeEACR11,
+    encodeEACR11_SIGNED,
+    encodeEACRG11,
+    encodeEACRG11_SIGNED,
+    encodeETC2RGB,
+    encodeETC2RGBA,
+    encodeETC2RGBA1,
+    encodeETC2sRGB,
+    encodeETC2sRGBA1,
+    encodeETC2sRGBA8,
 
     decodeDXT1,
     decodeBC1,

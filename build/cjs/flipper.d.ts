@@ -15,10 +15,14 @@ export declare function flipImage(src: Buffer | Uint8Array, width: number, heigh
  * Image cropper.
  *
  * @param {Buffer | Uint8Array} src - Source data as a Uint8Array or Buffer.
- * @param {number} width - New image width
- * @param {number} height - New image height
- * @param {number} srcBitsPerPixel - bits per pixel of source data
+ * @param {number} current_width - New image width
+ * @param {number} current_height - New image height
+ * @param {number} bytesPerPixel - bytes per pixel of source data
+ * @param {number} startX - starting width pixel to crop
+ * @param {number} startY - starting height pixel to crop
+ * @param {number} cropped_width - new width
+ * @param {number} cropped_height - new height
  * @returns {Buffer | Uint8Array}
  */
-export declare function cropImage(src: Buffer | Uint8Array, width: number, height: number, srcBitsPerPixel: number): Buffer | Uint8Array;
+export declare function cropImage(src: Buffer | Uint8Array, current_width: number, current_height: number, bytesPerPixel: number, startX: number | undefined, startY: number | undefined, cropped_width: number, cropped_height: number): Buffer | Uint8Array;
 //# sourceMappingURL=flipper.d.ts.map

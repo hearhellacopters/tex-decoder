@@ -1,7 +1,7 @@
 //source
 //https://github.com/K0lb3/tex2img/blob/e041424880234d41ef16257ac5c9d773d65a2e7f/src/basisu/basisu_gpu_texture.cpp
 
-import {bireader} from 'bireader';
+import {BiReader} from 'bireader';
 
 type m_lo = {
     m_t00 : number;
@@ -79,7 +79,7 @@ class fxt1_block{
     public m_hi:m_hi;
     public m_hi_bits:bigint; 
     constructor(data: Buffer|Uint8Array){
-        const br = new bireader(data);
+        const br = new BiReader(data);
         this.m_lo = {
             m_t00: br.ubit(2),
             m_t01: br.ubit(2),
@@ -115,11 +115,11 @@ class fxt1_block{
             m_t31: br.ubit(2)
         }
         br.rewind();
-        this.m_lo_bits = br.uint64();
+        this.m_lo_bits = br.uint64;
         br.rewind();
         this.m_sels = new Uint8Array(8)
         for (let i = 0; i < 8; i++) {
-            this.m_sels[i] = br.ubyte();
+            this.m_sels[i] = br.ubyte;
         }
         this.m_hi = {
             m_b0: br.ubit(5),
@@ -139,7 +139,7 @@ class fxt1_block{
 			m_mode: br.ubit(1)
         }
         br.skip(-8);
-        this.m_hi_bits = br.uint64();
+        this.m_hi_bits = br.uint64;
     }
 }
 

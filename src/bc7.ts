@@ -1,7 +1,7 @@
 //source
 //https://docs.rs/texture2ddecoder/latest/src/texture2ddecoder/bcn/bc7.rs.html
 
-import {bireader} from 'bireader';
+import {BiReader} from 'bireader';
 
 type usize = number;
 type u8 = number;
@@ -182,7 +182,7 @@ function expand_quantized(v: u8, bits: usize): u8 {
 }
 
 function decode_bc7_block(data: Uint8Array, outbuf: Uint32Array, block_num:number) {
-    let bit = new bireader(data);
+    let bit = new BiReader(data);
     let mode = 0;
     while (0 == bit.ubit(1) && mode < 8) {
         mode += 1

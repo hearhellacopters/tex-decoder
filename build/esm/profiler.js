@@ -341,8 +341,8 @@ function convertProfile(src, srcProfile, dstProfile, width, height) {
     var dst_read = readProfile(dstProfile);
     const srcIsUnsigned = src_value == UNSIGNED ? true : false;
     const dstIsUnsigned = dst_value == UNSIGNED ? true : false;
-    const br = new bireader_1.bireader(src);
-    const bw = new bireader_1.biwriter(dstData);
+    const br = new bireader_1.BiReader(src);
+    const bw = new bireader_1.BiWriter(dstData);
     for (let i = 0; i < srcPixels; i++) {
         //read all 4 values if listed
         for (let z = 1; z < 5; z++) {
@@ -381,7 +381,7 @@ function convertProfile(src, srcProfile, dstProfile, width, height) {
             }
         }
     }
-    const retval = bw.get();
+    const retval = bw.get;
     if (isBuffer(src)) {
         return Buffer.from(retval);
     }

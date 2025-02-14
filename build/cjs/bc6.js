@@ -315,7 +315,7 @@ function f16_to_u8(h) {
     return f32_to_u8(fp16_ieee_to_fp32_value(h));
 }
 function decode_bc6_block(data, outbuf, signed) {
-    let bit = new bireader_1.bireader(data);
+    let bit = new bireader_1.BiReader(data);
     let mode = bit.ubit(2);
     let ep_r = new Uint16Array(4); //{ /* rw, rx, ry, rz */ };
     let ep_g = new Uint16Array(4); //{ /* gw, gx, gy, gz */ };

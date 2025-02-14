@@ -46,37 +46,42 @@ exports.flipImage = flipImage;
  * Image cropper.
  *
  * @param {Buffer | Uint8Array} src - Source data as a Uint8Array or Buffer.
- * @param {number} width - New image width
- * @param {number} height - New image height
- * @param {number} srcBitsPerPixel - bits per pixel of source data
+ * @param {number} current_width - New image width
+ * @param {number} current_height - New image height
+ * @param {number} bytesPerPixel - bytes per pixel of source data
+ * @param {number} startX - starting width pixel to crop
+ * @param {number} startY - starting height pixel to crop
+ * @param {number} cropped_width - new width
+ * @param {number} cropped_height - new height
  * @returns {Buffer | Uint8Array}
  */
-function cropImage(src, width, height, srcBitsPerPixel) {
+function cropImage(src, current_width, current_height, bytesPerPixel, startX = 0, startY = 0, cropped_width, cropped_height) {
     if (!arraybuffcheck(src)) {
         throw new Error("Source must be Uint8Array or Buffer");
     }
-    // Assuming each pixel is represented by 'bitsPerPixel' bits
-    // Calculate the total size of the original image
-    const originalWidth = src.length / (height * srcBitsPerPixel);
-    const originalHeight = src.length / (width * srcBitsPerPixel);
-    // Calculate the starting position for the crop
-    const startX = Math.floor((originalWidth - width) / 2);
-    const startY = Math.floor((originalHeight - height) / 2);
-    // Create a new Uint8Array to store the cropped image data
+    if (startX + cropped_width > current_width || startY + cropped_height > current_height) {
+        throw new Error("Crop dimensions exceed original image size.");
+    }
+    if (src.length !== current_width * current_height * bytesPerPixel) {
+        throw new Error("Invalid raw data size for given width, height, and bytes per pixel.");
+    }
+    // Allocate buffer for cropped image
     var croppedData;
     if (isBuffer(src)) {
-        croppedData = Buffer.alloc(width * height * srcBitsPerPixel);
+        croppedData = Buffer.alloc(cropped_width * cropped_height * bytesPerPixel);
     }
     else {
-        croppedData = new Uint8Array(width * height * srcBitsPerPixel);
+        croppedData = new Uint8Array(cropped_width * cropped_height * bytesPerPixel);
     }
-    // Copy the cropped portion from the source to the new array
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            const sourceIndex = ((startY + y) * originalWidth + (startX + x)) * srcBitsPerPixel;
-            const destIndex = (y * width + x) * srcBitsPerPixel;
-            // Copy 'bitsPerPixel' bytes for each pixel
-            croppedData.set(src.subarray(sourceIndex, sourceIndex + srcBitsPerPixel), destIndex);
+    // Iterate through the cropped area
+    for (let y = 0; y < cropped_height; y++) {
+        for (let x = 0; x < cropped_width; x++) {
+            const sourceIndex = ((startY + y) * current_width + (startX + x)) * bytesPerPixel;
+            const destIndex = (y * cropped_width + x) * bytesPerPixel;
+            // Copy all color channels (depends on bytesPerPixel)
+            for (let b = 0; b < bytesPerPixel; b++) {
+                croppedData[destIndex + b] = src[sourceIndex + b];
+            }
         }
     }
     return croppedData;

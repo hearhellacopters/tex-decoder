@@ -54,40 +54,40 @@ const KEY = [
 ];
 class Header {
     constructor(data) {
-        const br = new bireader_1.bireader(data);
+        const br = new bireader_1.BiReader(data);
         this.isBuffer = isBuffer(data);
         this.br = br;
         br.be();
         this.magic = br.string({ length: 2 });
-        this.header_size = br.uint16();
-        this.header_crc16 = br.uint16();
-        this.file_size = br.uint32();
-        this.data_crc16 = br.uint16();
-        this.width = br.uint16();
-        this.height = br.uint16();
-        this.level_count = br.ubyte();
-        this.face_count = br.ubyte();
-        this.format = br.ubyte(), // u8
+        this.header_size = br.uint16;
+        this.header_crc16 = br.uint16;
+        this.file_size = br.uint32;
+        this.data_crc16 = br.uint16;
+        this.width = br.uint16;
+        this.height = br.uint16;
+        this.level_count = br.ubyte;
+        this.face_count = br.ubyte;
+        this.format = br.ubyte, // u8
             this.format_str = CRN_FORMATS[this.format];
-        this.flags = br.uint16();
-        this.reserved = br.uint32();
-        this.userdata = new Uint32Array([br.uint32(), br.uint32()]);
+        this.flags = br.uint16;
+        this.reserved = br.uint32;
+        this.userdata = new Uint32Array([br.uint32, br.uint32]);
         function makePalette(br) {
             return {
                 offset: br.ubit(24),
                 size: br.ubit(24),
-                count: br.uint16()
+                count: br.uint16
             };
         }
         this.color_endpoints = makePalette(br);
         this.color_selectors = makePalette(br);
         this.alpha_endpoints = makePalette(br);
         this.alpha_selectors = makePalette(br);
-        this.table_size = br.uint16();
+        this.table_size = br.uint16;
         this.table_offset = br.ubit(24);
         this.level_offset = new Uint32Array(this.level_count);
         for (let i = 0; i < this.level_count; i++) {
-            this.level_offset[i] = br.uint32();
+            this.level_offset[i] = br.uint32;
         }
     }
     fixed_size() {
@@ -249,7 +249,7 @@ class Header {
         const C = new Uint8Array([0, 2, 3, 4, 5, 6, 7, 1]); //DXT5
         var alpha_selectors = Array.from({ length: this.alpha_selectors.count }, () => {
             var s = new Uint8Array(6);
-            var s_bits = new bireader_1.biwriter(s);
+            var s_bits = new bireader_1.BiWriter(s);
             s_bits.be();
             var s_len = 6 * 8;
             for (let j = 0; j < 8; j++) {
@@ -263,7 +263,7 @@ class Header {
                 bitsToWrite = (s_len - j * 6 - 3) - (s_len - j * 6 - 6);
                 s_bits.ubit(C[y[j]], bitsToWrite);
             }
-            return s_bits.get().reverse();
+            return s_bits.get.reverse();
         });
         if (!codec.is_complete()) {
             throw new Error("extra bytes in codec of alpha_selectors");
@@ -320,7 +320,7 @@ class Codec {
         this.MAX_SYMBOL_COUNT_BIT = 14;
         this.MAX_SYMBOL_COUNT = 8192;
         this.buffer = data;
-        this.br = new bireader_1.bireader(data);
+        this.br = new bireader_1.BiReader(data);
         this.br.be();
     }
     look_bits(n) {
@@ -563,7 +563,7 @@ class Unpack {
         var color_selector_index = new Uint32Array([0]);
         var pitch = block_x * BLOCK_SIZE;
         var result = new Uint8Array(block_y * pitch);
-        var cursor = new bireader_1.biwriter(result);
+        var cursor = new bireader_1.BiWriter(result);
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
                 const skip_y = y == (chunk_y - 1) && (block_y & 1) == 1;
@@ -584,10 +584,10 @@ class Unpack {
                             }
                             //write
                             const corend_write = color_endpoints[tiles[i]];
-                            cursor.uint16(corend_write[0]);
-                            cursor.uint16(corend_write[1]);
+                            cursor.uint16 = corend_write[0];
+                            cursor.uint16 = corend_write[1];
                             color_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                         }
                     }
@@ -597,7 +597,7 @@ class Unpack {
         if (!codec.is_complete()) {
             throw new Error("extra bytes in DXT1 codec");
         }
-        return cursor.get();
+        return cursor.get;
     }
     unpackDxt5(tables, codec, width, height, face) {
         const BLOCK_SIZE = 16;
@@ -612,7 +612,7 @@ class Unpack {
         var alpha_selector_index = new Uint32Array([0]);
         var pitch = block_x * BLOCK_SIZE;
         var result = new Uint8Array(block_y * pitch);
-        var cursor = new bireader_1.biwriter(result);
+        var cursor = new bireader_1.BiWriter(result);
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
                 const skip_y = y == (chunk_y - 1) && (block_y & 1) == 1;
@@ -638,16 +638,16 @@ class Unpack {
                             }
                             //write
                             const alpend_write = alpha_endpoints[tiles[i]];
-                            cursor.uint8(alpend_write[0]);
-                            cursor.uint8(alpend_write[1]);
+                            cursor.uint8 = alpend_write[0];
+                            cursor.uint8 = alpend_write[1];
                             alpha_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                             const corend_write = color_endpoints[tiles[i]];
-                            cursor.uint16(corend_write[0]);
-                            cursor.uint16(corend_write[1]);
+                            cursor.uint16 = corend_write[0];
+                            cursor.uint16 = corend_write[1];
                             color_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                         }
                     }
@@ -657,7 +657,7 @@ class Unpack {
         if (!codec.is_complete()) {
             throw new Error("extra bytes in DXT1 codec");
         }
-        return cursor.get();
+        return cursor.get;
     }
     unpackDxt5A(tables, codec, width, height, face) {
         const BLOCK_SIZE = 8;
@@ -670,7 +670,7 @@ class Unpack {
         var alpha_selector_index = new Uint32Array([0]);
         var pitch = block_x * BLOCK_SIZE;
         var result = new Uint8Array(block_y * pitch);
-        var cursor = new bireader_1.biwriter(result);
+        var cursor = new bireader_1.BiWriter(result);
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
                 const skip_y = y == (chunk_y - 1) && (block_y & 1) == 1;
@@ -691,10 +691,10 @@ class Unpack {
                             }
                             //write
                             const alpend_write = alpha_endpoints[tiles[i]];
-                            cursor.uint8(alpend_write[0]);
-                            cursor.uint8(alpend_write[1]);
+                            cursor.uint8 = alpend_write[0];
+                            cursor.uint8 = alpend_write[1];
                             alpha_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                         }
                     }
@@ -704,7 +704,7 @@ class Unpack {
         if (!codec.is_complete()) {
             throw new Error("extra bytes in DXT1 codec");
         }
-        return cursor.get();
+        return cursor.get;
     }
     unpackDxn(tables, codec, width, height, face) {
         const BLOCK_SIZE = 16;
@@ -719,7 +719,7 @@ class Unpack {
         var alpha1_selector_index = new Uint32Array([0]);
         var pitch = block_x * BLOCK_SIZE;
         var result = new Uint8Array(block_y * pitch);
-        var cursor = new bireader_1.biwriter(result);
+        var cursor = new bireader_1.BiWriter(result);
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
                 const skip_y = y == (chunk_y - 1) && (block_y & 1) == 1;
@@ -745,16 +745,16 @@ class Unpack {
                             }
                             //write
                             const alp0end_write = alpha0_endpoints[tiles[i]];
-                            cursor.uint8(alp0end_write[0]);
-                            cursor.uint8(alp0end_write[1]);
+                            cursor.uint8 = alp0end_write[0];
+                            cursor.uint8 = alp0end_write[1];
                             alpha0_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                             const alp1end_write = alpha1_endpoints[tiles[i]];
-                            cursor.uint8(alp1end_write[0]);
-                            cursor.uint8(alp1end_write[1]);
+                            cursor.uint8 = alp1end_write[0];
+                            cursor.uint8 = alp1end_write[1];
                             alpha1_selector.forEach(value => {
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             });
                         }
                     }
@@ -764,7 +764,7 @@ class Unpack {
         if (!codec.is_complete()) {
             throw new Error("extra bytes in DXT1 codec");
         }
-        return cursor.get();
+        return cursor.get;
     }
 }
 function isBuffer(obj) {

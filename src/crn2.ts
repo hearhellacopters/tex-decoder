@@ -35,7 +35,7 @@ const CRN_FORMATS: any = {
     15: "cCRNFmtTotal"
 }
 
-import { bireader, biwriter } from 'bireader';
+import { BiReader, BiWriter } from 'bireader';
 
 type Palette = {
     offset: number;
@@ -69,7 +69,7 @@ const KEY = [
 
 class Header {
 
-    public br: bireader;
+    public br: BiReader;
     public magic: string;
     public header_size: number;
     public header_crc16: number;
@@ -94,32 +94,32 @@ class Header {
     public isBuffer: boolean;
 
     constructor(data: Uint8Array | Buffer) {
-        const br = new bireader(data);
+        const br = new BiReader(data);
         this.isBuffer = isBuffer(data)
         this.br = br;
         br.be();
         this.magic = br.string({ length: 2 })
-        this.header_size = br.uint16();
-        this.header_crc16 = br.uint16();
-        this.file_size = br.uint32();
-        this.data_crc16 = br.uint16();
+        this.header_size = br.uint16;
+        this.header_crc16 = br.uint16;
+        this.file_size = br.uint32;
+        this.data_crc16 = br.uint16;
 
-        this.width = br.uint16();
-        this.height = br.uint16();
-        this.level_count = br.ubyte();
-        this.face_count = br.ubyte();
-        this.format = br.ubyte() as typeof CRN_FORMATS, // u8
+        this.width = br.uint16;
+        this.height = br.uint16;
+        this.level_count = br.ubyte;
+        this.face_count = br.ubyte;
+        this.format = br.ubyte as typeof CRN_FORMATS, // u8
         this.format_str = CRN_FORMATS[this.format];
-        this.flags = br.uint16();
+        this.flags = br.uint16;
 
-        this.reserved = br.uint32();
-        this.userdata = new Uint32Array([br.uint32(), br.uint32()]);
+        this.reserved = br.uint32;
+        this.userdata = new Uint32Array([br.uint32, br.uint32]);
 
-        function makePalette(br: bireader): Palette {
+        function makePalette(br: BiReader): Palette {
             return {
                 offset: br.ubit(24),
                 size: br.ubit(24),
-                count: br.uint16()
+                count: br.uint16
             }
         }
 
@@ -131,14 +131,14 @@ class Header {
 
         this.alpha_selectors = makePalette(br);
 
-        this.table_size = br.uint16();
+        this.table_size = br.uint16;
 
         this.table_offset = br.ubit(24);
 
         this.level_offset = new Uint32Array(this.level_count);
 
         for (let i = 0; i < this.level_count; i++) {
-            this.level_offset[i] = br.uint32();
+            this.level_offset[i] = br.uint32;
         }
     }
 
@@ -322,7 +322,7 @@ class Header {
 
         var alpha_selectors  = Array.from({ length: this.alpha_selectors.count },() => {
             var s = new Uint8Array(6);
-            var s_bits = new biwriter(s);
+            var s_bits = new BiWriter(s);
             s_bits.be();
             var s_len = 6*8;
             for (let j = 0; j < 8; j++) {
@@ -337,7 +337,7 @@ class Header {
                 s_bits.ubit(C[y[j]],bitsToWrite)
             }
 
-            return s_bits.get().reverse()
+            return s_bits.get.reverse()
         });
 
         if(!codec.is_complete()){
@@ -393,13 +393,13 @@ class Header {
 
 class Codec{
     public buffer:Buffer|Uint8Array
-    public br:bireader;
+    public br:BiReader;
     public index=0;
     public MAX_SYMBOL_COUNT_BIT = 14;
     public MAX_SYMBOL_COUNT = 8192;
     constructor(data:Buffer|Uint8Array){
         this.buffer = data;
-        this.br = new bireader(data);
+        this.br = new BiReader(data);
         this.br.be();
     }
 
@@ -698,7 +698,7 @@ class Unpack{
         
         var result = new Uint8Array(block_y * pitch);
 
-        var cursor = new biwriter(result);
+        var cursor = new BiWriter(result);
 
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
@@ -720,10 +720,10 @@ class Unpack{
                             }
                             //write
                             const corend_write = color_endpoints[tiles[i]];
-                            cursor.uint16(corend_write[0]);
-                            cursor.uint16(corend_write[1]);
+                            cursor.uint16 = corend_write[0];
+                            cursor.uint16 = corend_write[1];
                             color_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                         }
                     }
@@ -733,7 +733,7 @@ class Unpack{
         if (!codec.is_complete()) { 
             throw new Error!("extra bytes in DXT1 codec") 
         }
-        return cursor.get() as Uint8Array;
+        return cursor.get as Uint8Array;
     }
 
     unpackDxt5(tables: Tables, codec: Codec, width: number, height: number, face:number){
@@ -756,7 +756,7 @@ class Unpack{
 
         var result = new Uint8Array(block_y * pitch);
 
-        var cursor = new biwriter(result);
+        var cursor = new BiWriter(result);
 
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
@@ -783,16 +783,16 @@ class Unpack{
                             }
                             //write
                             const alpend_write = alpha_endpoints[tiles[i]];
-                            cursor.uint8(alpend_write[0]);
-                            cursor.uint8(alpend_write[1]);
+                            cursor.uint8 = alpend_write[0];
+                            cursor.uint8 = alpend_write[1];
                             alpha_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                             const corend_write = color_endpoints[tiles[i]];
-                            cursor.uint16(corend_write[0]);
-                            cursor.uint16(corend_write[1]);
+                            cursor.uint16 = corend_write[0];
+                            cursor.uint16 = corend_write[1];
                             color_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                         }
                     }
@@ -802,7 +802,7 @@ class Unpack{
         if (!codec.is_complete()) { 
             throw new Error!("extra bytes in DXT1 codec") 
         }
-        return cursor.get() as Uint8Array;
+        return cursor.get as Uint8Array;
     }
 
     unpackDxt5A(tables: Tables, codec: Codec, width: number, height: number, face:number){
@@ -823,7 +823,7 @@ class Unpack{
 
         var result = new Uint8Array(block_y * pitch);
 
-        var cursor = new biwriter(result);
+        var cursor = new BiWriter(result);
 
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
@@ -845,10 +845,10 @@ class Unpack{
                             }
                             //write
                             const alpend_write = alpha_endpoints[tiles[i]];
-                            cursor.uint8(alpend_write[0]);
-                            cursor.uint8(alpend_write[1]);
+                            cursor.uint8 = alpend_write[0];
+                            cursor.uint8 = alpend_write[1];
                             alpha_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                         }
                     }
@@ -858,7 +858,7 @@ class Unpack{
         if (!codec.is_complete()) { 
             throw new Error!("extra bytes in DXT1 codec") 
         }
-        return cursor.get() as Uint8Array;
+        return cursor.get as Uint8Array;
     }
     
     unpackDxn(tables: Tables, codec: Codec, width: number, height: number, face:number){
@@ -881,7 +881,7 @@ class Unpack{
 
         var result = new Uint8Array(block_y * pitch);
 
-        var cursor = new biwriter(result);
+        var cursor = new BiWriter(result);
 
         for (let _f = 0; _f < face; _f++) {
             for (let y = 0; y < chunk_y; y++) {
@@ -908,16 +908,16 @@ class Unpack{
                             }
                             //write
                             const alp0end_write = alpha0_endpoints[tiles[i]];
-                            cursor.uint8(alp0end_write[0]);
-                            cursor.uint8(alp0end_write[1]);
+                            cursor.uint8 = alp0end_write[0];
+                            cursor.uint8 = alp0end_write[1];
                             alpha0_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                             const alp1end_write = alpha1_endpoints[tiles[i]];
-                            cursor.uint8(alp1end_write[0]);
-                            cursor.uint8(alp1end_write[1]);
+                            cursor.uint8 = alp1end_write[0];
+                            cursor.uint8 = alp1end_write[1];
                             alpha1_selector.forEach(value=>{
-                                cursor.uint8(value);
+                                cursor.uint8 = value;
                             })
                         }
                     }
@@ -927,7 +927,7 @@ class Unpack{
         if (!codec.is_complete()) { 
             throw new Error!("extra bytes in DXT1 codec") 
         }
-        return cursor.get() as Uint8Array;
+        return cursor.get as Uint8Array;
     }
 }
 

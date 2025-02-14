@@ -1,14 +1,20 @@
 "use strict";
-//source
-//https://github.com/K0lb3/tex2img/blob/e041424880234d41ef16257ac5c9d773d65a2e7f/src/etcpack/etcdec.cxx
+// source
+// https://github.com/Ericsson/ETCPACK/blob/master/source/etcdec.cxx
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decodeETC = exports.decodeETC2sRGBA1 = exports.decodeETC2sRGBA8 = exports.decodeETC2sRGB = exports.decodeEACRG11_SIGNED = exports.decodeEACR11_SIGNED = exports.decodeEACRG11 = exports.decodeEACR11 = exports.decodeETC2RGBA1 = exports.decodeETC2RGBA = exports.decodeETC1RGBA = exports.decodeETC2RGB = exports.decodeETC1RGB = exports.ETC_PROFILE = exports.ETC_FORMAT = void 0;
+exports.decodeETC = exports.decodeETC2sRGBA1 = exports.decodeETC2sRGBA8 = exports.decodeETC2sRGB = exports.decodeEACRG11_SIGNED = exports.decodeEACR11_SIGNED = exports.decodeEACRG11 = exports.decodeEACR11 = exports.decodeETC2RGBA1 = exports.decodeETC2RGBA = exports.decodeETC1RGBA = exports.decodeETC2RGB = exports.decodeETC1RGB = exports.ETC_PROFILE = exports.ETC_FORMAT = exports.get16bits11bits = exports.get16bits11signed = exports.clamp = exports.getbit = exports.decompressBlockTHUMB58HAlpha = exports.decompressBlockTHUMB59TAlpha = exports.decompressBlockDifferentialWithAlpha = exports.decompressBlockETC2 = exports.decompressBlockDiffFlip = exports.decompressBlockPlanar57 = exports.decompressBlockTHUMB58H = exports.calculatePaintColors58H = exports.decompressBlockTHUMB59T = exports.calculatePaintColors59T = exports.decompressColor = void 0;
+function CLAMP(ll, x, ul) {
+    return (((x) < (ll)) ? (ll) : (((x) > (ul)) ? (ul) : (x)));
+}
 function SHIFT(size, startpos) {
     return ((startpos) - (size) + 1);
 }
 function MASK(size, startpos) {
     return (((2 << (size - 1)) - 1) << SHIFT(size, startpos));
 }
+/**
+ * MUST RETURN TO FIRST ARGUMENT
+ */
 function PUTBITS(dest, data, size, startpos) {
     return ((dest & ~MASK(size, startpos)) | ((data << SHIFT(size, startpos)) & MASK(size, startpos)));
 }
@@ -18,6 +24,9 @@ function SHIFTHIGH(size, startpos) {
 function MASKHIGH(size, startpos) {
     return (((1 << (size)) - 1) << SHIFTHIGH(size, startpos));
 }
+/**
+ * MUST RETURN TO FIRST ARGUMENT
+ */
 function PUTBITSHIGH(dest, data, size, startpos) {
     return ((dest & ~MASKHIGH(size, startpos)) | ((data << SHIFTHIGH(size, startpos)) & MASKHIGH(size, startpos)));
 }
@@ -40,9 +49,6 @@ const BLOCKHEIGHT = 4;
 const BLOCKWIDTH = 4;
 const TABLE_BITS_59T = 3;
 // Helper Macros
-function CLAMP(ll, x, ul) {
-    return (((x) < (ll)) ? (ll) : (((x) > (ul)) ? (ul) : (x)));
-}
 function RED_CHANNEL(img, width, x, y, channels, value) {
     img[channels * (y * width + x) + 0] = value;
     return value;
@@ -53,10 +59,6 @@ function GREEN_CHANNEL(img, width, x, y, channels, value) {
 }
 function BLUE_CHANNEL(img, width, x, y, channels, value) {
     img[channels * (y * width + x) + 2] = value;
-    return value;
-}
-function ALPHA_CHANNEL(img, width, x, y, channels, value) {
-    img[channels * (y * width + x) + 3] = value;
     return value;
 }
 // 3-bit table for the 59 bit T-mode
@@ -297,6 +299,7 @@ function decompressColor(R_B, G_B, B_B, colors_RGB444, colors) {
     colors[1][G] = (colors_RGB444[1][G] << (8 - G_B)) | (colors_RGB444[1][G] >> (G_B - (8 - G_B)));
     colors[1][B] = (colors_RGB444[1][B] << (8 - B_B)) | (colors_RGB444[1][B] >> (B_B - (8 - B_B)));
 }
+exports.decompressColor = decompressColor;
 function calculatePaintColors59T(/**uint8 */ d, /**uint8 */ p, colors, possible_colors) {
     //////////////////////////////////////////////
     //
@@ -331,6 +334,7 @@ function calculatePaintColors59T(/**uint8 */ d, /**uint8 */ p, colors, possible_
         throw Error("Invalid pattern. Terminating");
     }
 }
+exports.calculatePaintColors59T = calculatePaintColors59T;
 // Decompress a T-mode block (simple packing)
 // Simple 59T packing:
 //|63 62 61 60 59|58 57 56 55|54 53 52 51|50 49 48 47|46 45 44 43|42 41 40 39|38 37 36 35|34 33 32|
@@ -373,6 +377,7 @@ function decompressBlockTHUMB59Tc(/**unsigned int*/ block_part1, /**unsigned int
 function decompressBlockTHUMB59T(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockTHUMB59Tc(block_part1, block_part2, img, width, height, startx, starty, 3);
 }
+exports.decompressBlockTHUMB59T = decompressBlockTHUMB59T;
 function calculatePaintColors58H(/**uint8*/ d, /**uint8*/ p, colors, possible_colors) {
     //////////////////////////////////////////////
     //
@@ -407,6 +412,7 @@ function calculatePaintColors58H(/**uint8*/ d, /**uint8*/ p, colors, possible_co
         throw Error("Invalid pattern. Terminating");
     }
 }
+exports.calculatePaintColors58H = calculatePaintColors58H;
 // Decompress an H-mode block 
 function decompressBlockTHUMB58Hc(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channels) {
     const col0 = new Int32Array(1);
@@ -451,6 +457,7 @@ function decompressBlockTHUMB58Hc(/**unsigned int*/ block_part1, /**unsigned int
 function decompressBlockTHUMB58H(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockTHUMB58Hc(block_part1, block_part2, img, width, height, startx, starty, 3);
 }
+exports.decompressBlockTHUMB58H = decompressBlockTHUMB58H;
 // Decompress the planar mode.
 function decompressBlockPlanar57c(/**unsigned int*/ compressed57_1, /**unsigned int*/ compressed57_2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channels) {
     const colorO = new Uint8Array(3);
@@ -485,6 +492,7 @@ function decompressBlockPlanar57c(/**unsigned int*/ compressed57_1, /**unsigned 
 function decompressBlockPlanar57(/**unsigned int*/ compressed57_1, /**unsigned int*/ compressed57_2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockPlanar57c(compressed57_1, compressed57_2, img, width, height, startx, starty, 3);
 }
+exports.decompressBlockPlanar57 = decompressBlockPlanar57;
 // Decompress an ETC1 block (or ETC2 using individual or differential mode).
 function decompressBlockDiffFlipC(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ dstImage, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channels) {
     const avg_color = new Uint8Array(3);
@@ -711,6 +719,7 @@ function decompressBlockDiffFlipC(/**unsigned int*/ block_part1, /**unsigned int
 function decompressBlockDiffFlip(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ dstImage, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockDiffFlipC(block_part1, block_part2, dstImage, width, height, startx, starty, 3);
 }
+exports.decompressBlockDiffFlip = decompressBlockDiffFlip;
 // Decompress an ETC2 RGB block
 function decompressBlockETC2c(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ dstImage, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channels) {
     var diffbit = new Int32Array(1);
@@ -770,6 +779,7 @@ function decompressBlockETC2c(/**unsigned int*/ block_part1, /**unsigned int*/ b
 function decompressBlockETC2(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockETC2c(block_part1, block_part2, img, width, height, startx, starty, 3);
 }
+exports.decompressBlockETC2 = decompressBlockETC2;
 // Decompress an ETC2 block with punchthrough alpha
 function decompressBlockDifferentialWithAlphaC(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8* */ img, /**uint8* */ alpha, /**int */ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channelsRGB) {
     const avg_color = new Uint8Array(3);
@@ -950,6 +960,7 @@ function decompressBlockDifferentialWithAlphaC(/**unsigned int*/ block_part1, /*
 function decompressBlockDifferentialWithAlpha(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8* */ img, /**uint8* */ alpha, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockDifferentialWithAlphaC(block_part1, block_part2, img, alpha, width, height, startx, starty, 3);
 }
+exports.decompressBlockDifferentialWithAlpha = decompressBlockDifferentialWithAlpha;
 // similar to regular decompression, but alpha channel is set to 0 if pixel index is 2, otherwise 255.
 function decompressBlockTHUMB59TAlphaC(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**uint8* */ alpha, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channelsRGB) {
     const colorsRGB444 = Array.from({ length: 2 }, () => new Uint8Array(3));
@@ -1007,6 +1018,7 @@ function decompressBlockTHUMB59TAlphaC(/**unsigned int*/ block_part1, /**unsigne
 function decompressBlockTHUMB59TAlpha(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**uint8* */ alpha, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockTHUMB59TAlphaC(block_part1, block_part2, img, alpha, width, height, startx, starty, 3);
 }
+exports.decompressBlockTHUMB59TAlpha = decompressBlockTHUMB59TAlpha;
 // Decompress an H-mode block with alpha
 function decompressBlockTHUMB58HAlphaC(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**uint8* */ alpha, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channelsRGB) {
     const col0 = new Int32Array(1);
@@ -1072,6 +1084,7 @@ function decompressBlockTHUMB58HAlphaC(/**unsigned int*/ block_part1, /**unsigne
 function decompressBlockTHUMB58HAlpha(/**unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**uint8* */ alpha, /**int */ width, /**int*/ height, /**int*/ startx, /**int*/ starty) {
     decompressBlockTHUMB58HAlphaC(block_part1, block_part2, img, alpha, width, height, startx, starty, 3);
 }
+exports.decompressBlockTHUMB58HAlpha = decompressBlockTHUMB58HAlpha;
 // Decompression function for ETC2_RGBA1 format.
 // NO WARRANTY --- SEE STATEMENT IN TOP OF FILE (C) Ericsson AB 2005-2013. All Rights Reserved.
 function decompressBlockETC21BitAlphaC(/** unsigned int*/ block_part1, /**unsigned int*/ block_part2, /**uint8 * */ img, /**uint8* */ alphaimg, /**int*/ width, /**int*/ height, /**int*/ startx, /**int*/ starty, /**int*/ channelsRGB) {
@@ -1200,6 +1213,7 @@ function getbit(input, frompos, topos) {
         return (((1 << frompos) & input) >> (frompos - topos)) & 0xFF;
     return (((1 << frompos) & input) << (topos - frompos)) & 0xFF;
 }
+exports.getbit = getbit;
 // takes as input a value, returns the value clamped to the interval [0,255].
 function clamp(val) {
     if (val < 0)
@@ -1208,6 +1222,7 @@ function clamp(val) {
         val = 255;
     return val;
 }
+exports.clamp = clamp;
 // Decodes tha alpha component in a block coded with ETC2_RGBA.
 // Note that this decoding is slightly different from that of ETC2_R.
 // However, a hardware decoder can share gates between the two formats as explained
@@ -1282,6 +1297,7 @@ function get16bits11signed(/**int*/ base, /**int*/ table, /**int*/ mul, /**int*/
     }
     return sixteenbits;
 }
+exports.get16bits11signed = get16bits11signed;
 // Does decompression and then immediately converts from 11 bit signed to a 16-bit format 
 // Calculates the 11 bit value represented by base, table, mul and index, and extends it to 16 bits.
 // NO WARRANTY --- SEE STATEMENT IN TOP OF FILE (C) Ericsson AB 2005-2013. All Rights Reserved.
@@ -1318,6 +1334,7 @@ function get16bits11bits(/**int*/ base, /**int*/ table, /**int*/ mul, /**int*/ i
     const sixteenbits = new Uint16Array([(elevenbits << 5) + (elevenbits >> 6)]);
     return sixteenbits[0];
 }
+exports.get16bits11bits = get16bits11bits;
 // Decompresses a block using one of the EAC_R or EAC_R_SIGNED-formats
 function decompressBlockAlpha16bitC(/**uint8* */ data, srcoff, /**uint8* */ dst, dstoff, /**int*/ width, /**int*/ height, /**int*/ ix, /**int*/ iy, /**int*/ channels) {
     /*int*/ var alpha = new Int32Array([data[srcoff + 0] & 0xFF]);
@@ -1397,47 +1414,48 @@ const AF_NONE = 0;
 const AF_1BIT = 1;
 const AF_8BIT = 2;
 const AF_11BIT = 3;
-const ETC1_RGB = 0; //ceil(width/4) * ceil(height/4) * 8
-const ETC2_RGB = 1; //ceil(width/4) * ceil(height/4) * 8
-const ETC1_RGBA8 = 2; //ceil(width/4) * ceil(height/4) * 8
-const ETC2_RGBA8 = 3; //ceil(width/4) * ceil(height/4) * 16
-const ETC2_RGBA1 = 4; //ceil(width/4) * ceil(height/4) * 8
-const EAC_R11 = 5; //ceil(width/4) * ceil(height/4) * 8
-const EAC_RG11 = 6; //ceil(width/4) * ceil(height/4) * 16
-const EAC_R11_SIGNED = 7; //ceil(width/4) * ceil(height/4) * 8
-const EAC_RG11_SIGNED = 8; //ceil(width/4) * ceil(height/4) * 16
-const ETC2_SRGB = 9; //ceil(width/4) * ceil(height/4) * 8
-const ETC2_SRGBA8 = 10; //ceil(width/4) * ceil(height/4) * 16
-const ETC2_SRGBA1 = 11; //ceil(width/4) * ceil(height/4) * 8
+const ETC1_RGB = 0, //ceil(width/4) * ceil(height/4) * 8
+ETC2_RGB = 1, //ceil(width/4) * ceil(height/4) * 8
+ETC1_RGBA8 = 2, //ceil(width/4) * ceil(height/4) * 8
+ETC2_RGBA8 = 3, //ceil(width/4) * ceil(height/4) * 16
+ETC2_RGBA1 = 4, //ceil(width/4) * ceil(height/4) * 8
+EAC_R11 = 5, //ceil(width/4) * ceil(height/4) * 8
+EAC_RG11 = 6, //ceil(width/4) * ceil(height/4) * 16
+EAC_R11_SIGNED = 7, //ceil(width/4) * ceil(height/4) * 8
+EAC_RG11_SIGNED = 8, //ceil(width/4) * ceil(height/4) * 16
+ETC2_SRGB = 9, //ceil(width/4) * ceil(height/4) * 8
+ETC2_SRGBA8 = 10, //ceil(width/4) * ceil(height/4) * 16
+ETC2_SRGBA1 = 11; //ceil(width/4) * ceil(height/4) * 8
 /**
-* ```
-* 0  = ETC1_RGB;
-* 1  = ETC2_RGB;
-* 2  = ETC1_RGBA8; 	//same as 0 but with alpha stored as second image (double height)
-* 3  = ETC2_RGBA8;
-* 4  = ETC2_RGBA1;
-* 5  = EAC_R11;
-* 6  = EAC_RG11;
-* 7  = EAC_R11_SIGNED;
-* 8  = EAC_RG11_SIGNED;
-* 9  = ETC2_SRGB;
-* 10 = ETC2_SRGBA8;
-* 11 = ETC2_SRGBA1;
-* ```
-*/
+ * ```
+ * 0  = ETC1_RGB;        // Basic ETC
+ * 1  = ETC2_RGB;        // Basic ETC2 without alpha
+ * 2  = ETC1_RGBA8;      // Same as 0 but with alpha stored as second image (double height)
+ * 3  = ETC2_RGBA8;      // Basic ETC2 with alpha
+ * 4  = ETC2_RGBA1;      // ETC2 with punchthrough alpha
+ * 5  = EAC_R11;         // Red channel 11 bits
+ * 6  = EAC_RG11;        // Red & Green channel 11 bits
+ * 7  = EAC_R11_SIGNED;  // Red channel signed 11 bits
+ * 8  = EAC_RG11_SIGNED; // Red & Green channel signed 11 bits
+ * 9  = ETC2_SRGB;       // Basic ETC2 without alpha as sRGB
+ * 10 = ETC2_SRGBA8;     // Basic ETC2 with alpha as sRGB
+ * 11 = ETC2_SRGBA1;     // ETC2 sRGB with punchthrough alpha
+ * ```
+ * @enum {number}
+ */
 exports.ETC_FORMAT = {
-    ETC1_RGB,
-    ETC2_RGB,
-    ETC1_RGBA8,
-    ETC2_RGBA8,
-    ETC2_RGBA1,
-    EAC_R11,
-    EAC_RG11,
-    EAC_R11_SIGNED,
-    EAC_RG11_SIGNED,
-    ETC2_SRGB,
-    ETC2_SRGBA8,
-    ETC2_SRGBA1,
+    ETC1_RGB, // ETC1_RGB_NO_MIPMAPS                // GL_ETC1_RGB8_OES
+    ETC2_RGB, // ETC2PACKAGE_RGB_NO_MIPMAPS         // GL_COMPRESSED_RGB8_ETC2
+    ETC1_RGBA8, // ETC1_RGB_NO_MIPMAPS                // GL_ETC1_RGB8_OES
+    ETC2_RGBA8, // ETC2PACKAGE_RGBA_NO_MIPMAPS        // GL_COMPRESSED_RGBA8_ETC2_EAC
+    ETC2_RGBA1, // ETC2PACKAGE_RGBA1_NO_MIPMAPS 	   // GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
+    EAC_R11, // ETC2PACKAGE_R_NO_MIPMAPS           // GL_COMPRESSED_R11_EAC
+    EAC_RG11, // ETC2PACKAGE_RG_NO_MIPMAPS          // GL_COMPRESSED_RG11_EAC
+    EAC_R11_SIGNED, // ETC2PACKAGE_R_SIGNED_NO_MIPMAPS    // GL_COMPRESSED_SIGNED_R11_EAC
+    EAC_RG11_SIGNED, // ETC2PACKAGE_RG_SIGNED_NO_MIPMAPS   // GL_COMPRESSED_SIGNED_RG11_EAC
+    ETC2_SRGB, // ETC2PACKAGE_sRGB_NO_MIPMAPS        // GL_SRGB
+    ETC2_SRGBA8, // ETC2PACKAGE_sRGBA_NO_MIPMAPS       // GL_COMPRESSED_SRGB8_ETC2
+    ETC2_SRGBA1, // ETC2PACKAGE_sRGBA1_NO_MIPMAPS      // GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2
 };
 const RGB = 1;
 const RGBA = 2;
@@ -1457,10 +1475,18 @@ function isBuffer(obj) {
 function arraybuffcheck(obj) {
     return obj instanceof Uint8Array || isBuffer(obj);
 }
+function malloc(obj, amount) {
+    if (isBuffer(obj)) {
+        return Buffer.alloc(amount);
+    }
+    else {
+        return new Uint8Array(amount);
+    }
+}
 /**
 * Decompress ETC1RGB Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1473,7 +1499,7 @@ exports.decodeETC1RGB = decodeETC1RGB;
 /**
 * Decompress ETC2RGB Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1486,7 +1512,7 @@ exports.decodeETC2RGB = decodeETC2RGB;
 /**
 * Decompress ETC1RGB with Alpha Data. Alpha stored as second image (double height). Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1499,7 +1525,7 @@ exports.decodeETC1RGBA = decodeETC1RGBA;
 /**
 * Decompress ETC2RGBA Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1512,7 +1538,7 @@ exports.decodeETC2RGBA = decodeETC2RGBA;
 /**
 * Decompress ETC2RGBA1 Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1525,7 +1551,7 @@ exports.decodeETC2RGBA1 = decodeETC2RGBA1;
 /**
 * Decompress EACR11 Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1538,7 +1564,7 @@ exports.decodeEACR11 = decodeEACR11;
 /**
 * Decompress EACRG11 Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1551,7 +1577,7 @@ exports.decodeEACRG11 = decodeEACRG11;
 /**
 * Decompress EACR11 SIGNED Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1564,7 +1590,7 @@ exports.decodeEACR11_SIGNED = decodeEACR11_SIGNED;
 /**
 * Decompress RG11 SIGNED Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1577,7 +1603,7 @@ exports.decodeEACRG11_SIGNED = decodeEACRG11_SIGNED;
 /**
 * Decompress ETC2sRGB Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1590,7 +1616,7 @@ exports.decodeETC2sRGB = decodeETC2sRGB;
 /**
 * Decompress ETC2sRGBA8 Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1603,7 +1629,7 @@ exports.decodeETC2sRGBA8 = decodeETC2sRGBA8;
 /**
 * Decompress ETC2sRGBA1 Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} forceRGBorRGBA - Forces RGB or RGBA8 byte order
@@ -1616,16 +1642,16 @@ exports.decodeETC2sRGBA1 = decodeETC2sRGBA1;
 /**
 * Decompress ETC Data. Returns Buffer or Uint8Array based on source data type.
 *
-* @param {Buffer|Uint8Array} src - Source data as ```Buffer``` or ```Uint8Array```
+* @param {uint8} src - Source data as ```Buffer``` or ```Uint8Array```
 * @param {number} width - Image Width
 * @param {number} height - Image Height
 * @param {number} ETC_FORMAT -
-* ```
-* //use import ETC_FORMAT.yourFormat
-* import {ETC_FORMAT} from 'tex-decoder'
+* ```js
+* // use import ETC_FORMAT.yourFormat
+* import { ETC_FORMAT } from 'tex-decoder';
 * 0  = ETC_FORMAT.ETC1_RGB;
 * 1  = ETC_FORMAT.ETC2_RGB;
-* 2  = ETC_FORMAT.ETC1_RGBA8; //same as 0 but with alpha stored as second image (double height)
+* 2  = ETC_FORMAT.ETC1_RGBA8; // same as 0 but with alpha stored as second image (double height)
 * 3  = ETC_FORMAT.ETC2_RGBA8;
 * 4  = ETC_FORMAT.ETC2_RGBA1;
 * 5  = ETC_FORMAT.EAC_R11;
@@ -1737,7 +1763,7 @@ function decodeETC(src, width, height, ETC_FORMAT, forceRGBorRGBA) {
         default:
             throw new Error("Unsupported srcFormat");
     }
-    var dstImage = isBuffer(src) ? Buffer.alloc(dstChannels * dstChannelBytes * width * height) : new Uint8Array(dstChannels * dstChannelBytes * width * height);
+    var dstImage = malloc(src, dstChannels * dstChannelBytes * width * height);
     if (alphaFormat != AF_NONE) {
         setupAlphaTable();
     }
@@ -1801,7 +1827,7 @@ function decodeETC(src, width, height, ETC_FORMAT, forceRGBorRGBA) {
     if (forceRGBorRGBA) {
         switch (format) {
             case "RG":
-                var newimg = isBuffer(src) ? Buffer.alloc(4 * width * height) : new Uint8Array(4 * width * height);
+                var newimg = malloc(src, 4 * width * height);
                 var total = dstImage.length;
                 var new_image_off = 0;
                 for (var yy = 0; yy < total; yy += 4) {
@@ -1837,7 +1863,7 @@ function decodeETC(src, width, height, ETC_FORMAT, forceRGBorRGBA) {
                 dstImage = newimg;
                 break;
             case "R":
-                var newimg = isBuffer(src) ? Buffer.alloc(4 * width * height) : new Uint8Array(4 * width * height);
+                var newimg = malloc(src, 4 * width * height);
                 var total = dstImage.length;
                 var new_image_off = 0;
                 for (var yy = 0; yy < total; yy += 2) {
@@ -1868,7 +1894,7 @@ function decodeETC(src, width, height, ETC_FORMAT, forceRGBorRGBA) {
             case "RGBA":
                 break;
             case "RGB":
-                var newimg = isBuffer(src) ? Buffer.alloc(4 * width * height) : new Uint8Array(4 * width * height);
+                var newimg = malloc(src, 4 * width * height);
                 var total = dstImage.length;
                 var new_image_off = 0;
                 for (var yy = 0; yy < total; yy += 3) {
@@ -1886,7 +1912,7 @@ function decodeETC(src, width, height, ETC_FORMAT, forceRGBorRGBA) {
                 dstImage = newimg;
                 break;
             case "RGB_A":
-                var newimg = isBuffer(src) ? Buffer.alloc(4 * width * (height / 2)) : new Uint8Array(4 * width * (height / 2));
+                var newimg = malloc(src, 4 * width * (height / 2));
                 var alph_off = 3 * width * (height / 2);
                 var total = 3 * width * (height / 2);
                 var new_image_off = 0;

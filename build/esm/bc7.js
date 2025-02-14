@@ -160,7 +160,7 @@ function expand_quantized(v, bits) {
     return s | (s >>> bits);
 }
 function decode_bc7_block(data, outbuf, block_num) {
-    let bit = new bireader_1.bireader(data);
+    let bit = new bireader_1.BiReader(data);
     let mode = 0;
     while (0 == bit.ubit(1) && mode < 8) {
         mode += 1;

@@ -1,14 +1,14 @@
 //source 
 //https://docs.rs/texture2ddecoder/latest/src/texture2ddecoder/bcn/bc6.rs.html
 
-import {bireader} from 'bireader';
+import {BiReader} from 'bireader';
 
 type bool = boolean;
 type usize = number;
 type u8 = number;
 type u16 = number;
 type f32 = number;
-type BitReader = bireader;
+type BitReader = BiReader;
 
 function color(r:number, g:number, b:number, a:number):number {
     return (((a & 0xFF) << 24) | ((b & 0xFF) << 16) | ((g & 0xFF) << 8) | (r & 0xFF))>>> 0
@@ -346,7 +346,7 @@ function f16_to_u8(h: u16): u8 {
 
 function decode_bc6_block(data: Uint8Array|Buffer, outbuf: Uint32Array, signed: bool) {
 
-    let bit: BitReader = new bireader(data);
+    let bit: BitReader = new BiReader(data);
 
     let mode: u8 = bit.ubit(2);
 

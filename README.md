@@ -675,8 +675,8 @@ Crops image data. Bits per pixel must be supplied of source data. Source must be
 <tbody>
 <tr>
     <td align="center"><b>Name</td>
-    <td>cropImage(<b>src, width, height, srcBitsPerPixel</b>)</td>
-    <td>Use is24 as <b>true</b> for 24 bit profiles</td>
+    <td>cropImage(<b>src, current_width, current_height, bytesPerPixel, startX, startY, cropped_width, cropped_height</b>)</td>
+    <td>Will crop the image based on cropped_width and cropped_height starting at startX & startX pixel</td>
   </tr>
 </tbody>
 </table>

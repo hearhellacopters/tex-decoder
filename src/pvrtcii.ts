@@ -1,7 +1,9 @@
-//source
-//https://github.com/BinomialLLC/basis_universal/blob/ad9386a4a1cf2a248f7bbd45f543a7448db15267/encoder/basisu_gpu_texture.cpp
+// source
+// https://github.com/BinomialLLC/basis_universal/blob/ad9386a4a1cf2a248f7bbd45f543a7448db15267/encoder/basisu_gpu_texture.cpp
 
-import {bireader} from 'bireader';
+import {BiReader} from 'bireader';
+
+
 
 class pvrtc2_block{
     public m : number
@@ -19,51 +21,51 @@ class pvrtc2_block{
     public m_modulation:Uint8Array;
     public m_color_data_bits:number;
     constructor(data: Buffer|Uint8Array){
-        const br = new bireader(data);
+        const br = new BiReader(data);
         this.m_modulation = new Uint8Array(4);
-        this.m = br.uint32(); 
+        this.m = br.uint32; 
         br.skip(-4);
         for (let i = 0; i < 4; i++) {
-            this.m_modulation[i] = br.ubyte(); 
+            this.m_modulation[i] = br.ubyte; 
         }
         br.skip(0,31)
         if(br.ubit(1)){
-            br.skip(0,-32)
-            this.m_mod_flag = br.ubit(1)
+            br.skip(0,-32);
+            this.m_mod_flag = br.ubit(1);
 
-            this.m_blue_a = br.ubit(4)
-            this.m_green_a = br.ubit(5)
-            this.m_red_a = br.ubit(5)
+            this.m_blue_a = br.ubit(4);
+            this.m_green_a = br.ubit(5);
+            this.m_red_a = br.ubit(5);
             this.m_alpha_a = 0;
 
-            this.m_hard_flag = br.ubit(1)
+            this.m_hard_flag = br.ubit(1);
 
-            this.m_blue_b = br.ubit(5)
-            this.m_green_b = br.ubit(5)
-            this.m_red_b = br.ubit(5)
+            this.m_blue_b = br.ubit(5);
+            this.m_green_b = br.ubit(5);
+            this.m_red_b = br.ubit(5);
             this.m_alpha_b = 0;
 
-            this.m_opaque_flag = br.ubit(1) //only used if this is 1            
+            this.m_opaque_flag = br.ubit(1); //only used if this is 1            
         } else {
-            br.skip(0,-32)
-            this.m_mod_flag = br.ubit(1)
+            br.skip(0,-32);
+            this.m_mod_flag = br.ubit(1);
 
-            this.m_blue_a = br.ubit(3)
-            this.m_green_a = br.ubit(4)
-            this.m_red_a = br.ubit(4)
-            this.m_alpha_a = br.ubit(3)
+            this.m_blue_a = br.ubit(3);
+            this.m_green_a = br.ubit(4);
+            this.m_red_a = br.ubit(4);
+            this.m_alpha_a = br.ubit(3);
 
-            this.m_hard_flag = br.ubit(1)
+            this.m_hard_flag = br.ubit(1);
 
-            this.m_blue_b = br.ubit(4)
-            this.m_green_b = br.ubit(4)
-            this.m_red_b = br.ubit(4)
-            this.m_alpha_b = br.ubit(3)
+            this.m_blue_b = br.ubit(4);
+            this.m_green_b = br.ubit(4);
+            this.m_red_b = br.ubit(4);
+            this.m_alpha_b = br.ubit(3);
 
-            this.m_opaque_flag = br.ubit(1)
+            this.m_opaque_flag = br.ubit(1);
         }
         br.skip(-4);
-        this.m_color_data_bits = br.uint32();
+        this.m_color_data_bits = br.uint32;
     }
 }
 
@@ -266,11 +268,11 @@ function isArrayOrBuffer(obj:  Buffer|Uint8Array): boolean {
  * @param {Buffer|Uint8Array} data - Source data as ```Uint8Array``` or ```Buffer```
  * @param {number} width - Image Width
  * @param {number} height - Image Height
- * @returns ```Uint8Array``` or ```Buffer``` as RGBA
+ * @returns ``Uint8Array`` or ``Buffer`` as RGBA
  */
 export function decodePVRTCII4bit(data:Buffer|Uint8Array, width:number, height:number):Buffer|Uint8Array{
     if(!isArrayOrBuffer(data)){
-        throw new Error(`Source data must be Uint8Array or Buffer`)
+        throw new Error(`Source data must be Uint8Array or Buffer`);
     }
 
     const num_blocks_x = Math.floor((width + 4 - 1) / 4);
@@ -284,16 +286,16 @@ export function decodePVRTCII4bit(data:Buffer|Uint8Array, width:number, height:n
     for (let by = 0; by < num_blocks_y; by++) {
         for (let bx = 0; bx < num_blocks_x; bx++) {
             unpack_pvrtc2(data.subarray(data_offset,data_offset+raw_block_size), buffer, bx, by, false);
-            copy_block_buffer(bx,by,width,height,4,4,buffer,image)
+            copy_block_buffer(bx,by,width,height,4,4,buffer,image);
             data_offset += raw_block_size;
             buffer = [];
         }
     }
 
     if(isBuffer(data)){
-        return Buffer.from(image.buffer)
+        return Buffer.from(image.buffer);
     }
-    return new Uint8Array(image.buffer)
+    return new Uint8Array(image.buffer);
 }
 
 /**
@@ -302,11 +304,11 @@ export function decodePVRTCII4bit(data:Buffer|Uint8Array, width:number, height:n
  * @param {Buffer|Uint8Array} data - Source data as ```Uint8Array``` or ```Buffer```
  * @param {number} width - Image Width
  * @param {number} height - Image Height
- * @returns ```Uint8Array``` or ```Buffer``` as RGBA
+ * @returns ``Uint8Array`` or ``Buffer`` as RGBA
  */
 export function decodePVRTCII2bit(data:Buffer|Uint8Array, width:number, height:number):Buffer|Uint8Array{
     if(!isArrayOrBuffer(data)){
-        throw new Error(`Source data must be Uint8Array or Buffer`)
+        throw new Error(`Source data must be Uint8Array or Buffer`);
     }
 
     const num_blocks_x = Math.floor((width + 4 - 1) / 4);
@@ -320,14 +322,14 @@ export function decodePVRTCII2bit(data:Buffer|Uint8Array, width:number, height:n
     for (let by = 0; by < num_blocks_y; by++) {
         for (let bx = 0; bx < num_blocks_x; bx++) {
             unpack_pvrtc2(data.subarray(data_offset,data_offset+raw_block_size), buffer, bx, by, true);
-            copy_block_buffer(bx,by,width,height,8,4,buffer,image)
+            copy_block_buffer(bx,by,width,height,8,4,buffer,image);
             data_offset += raw_block_size;
             buffer = [];
         }
     }
 
     if(isBuffer(data)){
-        return Buffer.from(image.buffer)
+        return Buffer.from(image.buffer);
     }
-    return new Uint8Array(image.buffer)
+    return new Uint8Array(image.buffer);
 }

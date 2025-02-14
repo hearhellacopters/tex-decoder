@@ -89,16 +89,16 @@ exports.CRC32 = CRC32;
  * @returns {retval} object with meta and unzipped data.
  */
 function readPNG(src) {
-    const br = new bireader_1.bireader(src);
+    const br = new bireader_1.BiReader(src);
     br.be();
-    if (!(br.ubyte() == 0x89)) {
+    if (!(br.ubyte == 0x89)) {
         throw new Error('Bad magics, first byte should be 0x89.');
     }
     const magic = br.string({ length: 3 });
     if (!(magic == "PNG")) {
         throw new Error('Bad magics, should be PNG.');
     }
-    const sig = br.uint32();
+    const sig = br.uint32;
     if (sig != 218765834) {
         throw new Error('Bad sig, should be 218765834.');
     }
@@ -111,36 +111,36 @@ function readPNG(src) {
     var interlace = 0;
     var size = br.size;
     var index = 0;
-    const chunks = new bireader_1.biwriter();
+    const chunks = new bireader_1.BiWriter();
     while (index != size) {
         const obj = {};
-        obj.len = br.uint32();
+        obj.len = br.uint32;
         obj.type = br.string({ length: 4 });
         br.skip(-4);
         const chunk_data = br.extract(obj.len + 4, true);
-        obj.crc = br.uint32();
+        obj.crc = br.uint32;
         var test_crc = CRC32(chunk_data);
         if (test_crc != obj.crc) {
-            throw new Error("Bad CRC @" + br.getOffset() + " got " + test_crc + " needed " + obj.crc);
+            throw new Error("Bad CRC @" + br.getOffset + " got " + test_crc + " needed " + obj.crc);
         }
         if (obj.type == "IHDR") {
-            const IHDR_chunk = new bireader_1.bireader(chunk_data);
+            const IHDR_chunk = new bireader_1.BiReader(chunk_data);
             IHDR_chunk.be();
             IHDR_chunk.skip(4);
-            width = IHDR_chunk.uint32();
-            height = IHDR_chunk.uint32();
-            bit_depth = IHDR_chunk.ubyte();
-            color_type = IHDR_chunk.ubyte();
-            compression = IHDR_chunk.ubyte();
-            filter = IHDR_chunk.ubyte();
-            interlace = IHDR_chunk.ubyte();
+            width = IHDR_chunk.uint32;
+            height = IHDR_chunk.uint32;
+            bit_depth = IHDR_chunk.ubyte;
+            color_type = IHDR_chunk.ubyte;
+            compression = IHDR_chunk.ubyte;
+            filter = IHDR_chunk.ubyte;
+            interlace = IHDR_chunk.ubyte;
         }
         else if (obj.type = "IDAT") {
             chunks.insert(chunk_data.subarray(4), true);
         }
-        index = br.getOffset();
+        index = br.getOffset;
     }
-    const zippeddata = chunks.get();
+    const zippeddata = chunks.get;
     const unzipped = (0, index_1.inflate)(zippeddata);
     var retval = unzipped;
     if (isBuffer(src)) {
@@ -188,27 +188,27 @@ function makePNG2(src, width, height, noAlpha, issRGB) {
     if (isBuffer(src)) {
         data = Buffer.from(CONSTANTS.PNG_SIGNATURE);
     }
-    const bw = new bireader_1.biwriter(data);
+    const bw = new bireader_1.BiWriter(data);
     bw.be();
     bw.goto(bw.size);
-    bw.uint32(0); //dummy chunk size
-    var chunk_start = bw.getOffset();
-    bw.uint32(CONSTANTS.TYPE_IHDR);
-    bw.uint32(width);
-    bw.uint32(height);
-    bw.ubyte(CONSTANTS.BIT_DEPTH);
-    bw.ubyte(COLORTYPE);
-    bw.ubyte(CONSTANTS.COMP);
-    bw.ubyte(CONSTANTS.FILTER);
-    bw.ubyte(CONSTANTS.INTER);
-    var chunk_end = bw.getOffset();
+    bw.uint32 = 0; //dummy chunk size
+    var chunk_start = bw.getOffset;
+    bw.uint32 = CONSTANTS.TYPE_IHDR;
+    bw.uint32 = width;
+    bw.uint32 = height;
+    bw.ubyte = CONSTANTS.BIT_DEPTH;
+    bw.ubyte = COLORTYPE;
+    bw.ubyte = CONSTANTS.COMP;
+    bw.ubyte = CONSTANTS.FILTER;
+    bw.ubyte = CONSTANTS.INTER;
+    var chunk_end = bw.getOffset;
     bw.goto(chunk_start);
     var to_CRC = bw.extract(chunk_end - chunk_start);
     bw.goto(chunk_start - 4);
-    bw.uint32(to_CRC.length - 4); //chunk size
+    bw.uint32 = to_CRC.length - 4; //chunk size
     var crc = CRC32(to_CRC);
     bw.goto(chunk_end);
-    bw.uint32(crc); //crc
+    bw.uint32 = crc; //crc
     if (issRGB) {
         if (isBuffer(src)) {
             data = Buffer.from(CONSTANTS.PNG_sRGB);
@@ -226,16 +226,16 @@ function makePNG2(src, width, height, noAlpha, issRGB) {
     if (isBuffer(src)) {
         zipped_data = Buffer.from(zipped_data);
     }
-    bw.uint32(zipped_data.length); //chunk size
-    chunk_start = bw.getOffset();
-    bw.uint32(CONSTANTS.TYPE_IDAT);
+    bw.uint32 = zipped_data.length; //chunk size
+    chunk_start = bw.getOffset;
+    bw.uint32 = CONSTANTS.TYPE_IDAT;
     bw.insert(zipped_data, true);
-    chunk_end = bw.getOffset();
+    chunk_end = bw.getOffset;
     bw.goto(chunk_start);
     to_CRC = bw.extract(chunk_end - chunk_start);
     crc = CRC32(to_CRC);
     bw.goto(chunk_end);
-    bw.uint32(crc); //crc
+    bw.uint32 = crc; //crc
     if (isBuffer(src)) {
         data = Buffer.from(CONSTANTS.PNG_END);
     }
@@ -243,7 +243,7 @@ function makePNG2(src, width, height, noAlpha, issRGB) {
         data = new Uint8Array(CONSTANTS.PNG_END);
     }
     bw.insert(data, true);
-    return bw.get();
+    return bw.get;
 }
 exports.makePNG2 = makePNG2;
 /**

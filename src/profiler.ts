@@ -1,4 +1,4 @@
-import {bireader, biwriter} from 'bireader'
+import {BiReader, BiWriter} from 'bireader'
 
 function isBuffer(obj: Buffer|Uint8Array): boolean {
     return (typeof Buffer !== 'undefined' && obj instanceof Buffer);
@@ -412,8 +412,8 @@ export function convertProfile(
     const srcIsUnsigned = src_value == UNSIGNED ? true : false
     const dstIsUnsigned = dst_value == UNSIGNED ? true : false
 
-    const br = new bireader(src)
-    const bw = new biwriter(dstData)
+    const br = new BiReader(src);
+    const bw = new BiWriter(dstData);
 
     for (let i = 0; i < srcPixels; i++) {
         //read all 4 values if listed
@@ -456,7 +456,7 @@ export function convertProfile(
         }
     }
 
-    const retval = bw.get()
+    const retval = bw.get;
 
     if(isBuffer(src)){
         return Buffer.from(retval)
